@@ -1,52 +1,71 @@
-
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  const Offer = sequelize.define('Offers', {
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER,
+  class Offer extends Model {
+    static associate({ User, Contest, Rating }) {
+      this.belongsTo(User, { foreignKey: 'userId', sourceKey: 'id' });
+      this.belongsTo(Contest, { foreignKey: 'contestId', sourceKey: 'id' });
+      this.hasOne(Rating, { foreignKey: 'offerId', sourceKey: 'id' });
+    }
+  }
+  Offer.init(
+    {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+      userId: {
+        field: 'user_id',
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'users',
+            key: 'id',
+          },
+        },
+      },
+      contestId: {
+        field: 'contest_id',
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'contests',
+            key: 'id',
+          },
+        },
+      },
+      text: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      fileName: {
+        field: 'file_name',
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      originalFileName: {
+        field: 'original_file_name',
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      status: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: 'pending',
+      },
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-
+    {
+      sequelize,
+      timestamps: false,
+      underscored: true,
+      modelName: 'Offer',
+      tableName: 'offers',
     },
-    contestId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    text: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    fileName: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    originalFileName: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    status: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      defaultValue: 'pending',
-    },
-  },
-  {
-    timestamps: false,
-  });
-
-  Offer.associate = function (models) {
-    Offer.belongsTo(models.User, { foreignKey: 'user_id', sourceKey: 'id' });
-  };
-
-  Offer.associate = function (models) {
-    Offer.belongsTo(models.Contest,
-      { foreignKey: 'contest_id', sourceKey: 'id' });
-  };
+  );
 
   return Offer;
 };

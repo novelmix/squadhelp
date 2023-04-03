@@ -1,10 +1,11 @@
-const {Select, Contest, Offer, User, Rating, Sequelize, sequelize} = require('../models');
-const ServerError =require('../errors/ServerError');
-const contestQueries = require('./queries/contestQueries');
-const userQueries = require('./queries/userQueries');
+const { Contest, Select, Sequelize, sequelize, Rating, Offer, User } = require('../models');
 const controller = require('../socketInit');
-const UtilFunctions = require('../utils/functions');
+const { updateContest, updateContestStatus }= require('../services/contest.service');
+const { createOffer, updateOffer, updateOfferStatus }= require('../services/offer.service');
+const { updateUser } = require('../services/user.service');
 const CONSTANTS = require('../constants');
+const UtilFunctions = require('../utils/functions');
+const ServerError = require('../errors/ServerError');
 
 module.exports.dataForContest = async (req, res, next) => {
   const response = {};
@@ -109,7 +110,7 @@ module.exports.updateContest = async (req, res, next) => {
   const contestId = req.body.contestId;
   delete req.body.contestId;
   try {
-    const updatedContest = await contestQueries.updateContest(req.body, {
+    const updatedContest = await updateContest(req.body, {
       id: contestId,
       userId: req.tokenData.userId,
     });
@@ -130,7 +131,7 @@ module.exports.setNewOffer = async (req, res, next) => {
   obj.userId = req.tokenData.userId;
   obj.contestId = req.body.contestId;
   try {
-    const result = await contestQueries.createOffer(obj);
+    const result = await createOffer(obj);
     delete result.contestId;
     delete result.userId;
     controller.getNotificationController().emitEntryCreated(
@@ -143,7 +144,7 @@ module.exports.setNewOffer = async (req, res, next) => {
 };
 
 const rejectOffer = async (offerId, creatorId, contestId) => {
-  const rejectedOffer = await contestQueries.updateOffer(
+  const rejectedOffer = await updateOffer(
     { status: CONSTANTS.OFFER_STATUS_REJECTED }, { id: offerId });
   controller.getNotificationController().emitChangeOfferStatus(creatorId,
     'Someone of yours offers was rejected', contestId);
@@ -152,7 +153,7 @@ const rejectOffer = async (offerId, creatorId, contestId) => {
 
 const resolveOffer = async (
   contestId, creatorId, orderId, offerId, priority, transaction) => {
-  const finishedContest = await contestQueries.updateContestStatus({
+  const finishedContest = await updateContestStatus({
     status: sequelize.literal(`   CASE
             WHEN "id"=${ contestId }  AND "orderId"='${ orderId }' THEN '${ CONSTANTS.CONTEST_STATUS_FINISHED }'
             WHEN "orderId"='${ orderId }' AND "priority"=${ priority +
@@ -161,10 +162,10 @@ const resolveOffer = async (
             END
     `),
   }, { orderId }, transaction);
-  await userQueries.updateUser(
+  await updateUser(
     { balance: sequelize.literal('balance + ' + finishedContest.prize) },
     creatorId, transaction);
-  const updatedOffers = await contestQueries.updateOfferStatus({
+  const updatedOffers = await updateOfferStatus({
     status: sequelize.literal(` CASE
             WHEN "id"=${ offerId } THEN '${ CONSTANTS.OFFER_STATUS_WON }'
             ELSE '${ CONSTANTS.OFFER_STATUS_REJECTED }'
@@ -241,7 +242,7 @@ module.exports.getCustomersContests = (req, res, next) => {
 module.exports.getContests = (req, res, next) => {
   const predicates = UtilFunctions.createWhereForAllContests(req.body.typeIndex,
     req.body.contestId, req.body.industry, req.body.awardSort);
-  Contest.findAll({
+  Contest.findAll({ 
     where: predicates.where,
     order: predicates.order,
     limit: req.body.limit,

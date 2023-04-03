@@ -1,11 +1,12 @@
-const {User} = require('../models');
+const { User } = require('../models');
 const Conversation = require('../models/mongoModels/conversation');
 const Message = require('../models/mongoModels/Message');
 const Catalog = require('../models/mongoModels/Catalog');
-const moment = require('moment');
-const userQueries = require('./queries/userQueries');
+const { findUser } = require('../services/user.service');
 const controller = require('../socketInit');
-const _ = require('lodash');
+// const moment = require('moment');
+// const _ = require('lodash');
+
 
 module.exports.addMessage = async (req, res, next) => {
   const participants = [req.tokenData.userId, req.body.recipient];
@@ -97,7 +98,7 @@ module.exports.getChat = async (req, res, next) => {
       },
     ]);
 
-    const interlocutor = await userQueries.findUser(
+    const interlocutor = await findUser(
       { id: req.body.interlocutorId });
     res.send({
       messages,

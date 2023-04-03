@@ -3,26 +3,27 @@ const {
   dataForContest,
   getCustomersContests,
   getContestById,
-  getContests,
   downloadFile,
   updateContest,
   setNewOffer,
   setOfferStatus,
+  getCreativeContests,
 } = require('../controllers/Contest.controller');
 const {
   canGetContest,
   onlyForCreative,
   canSendOffer,
   onlyForCustomerWhoCreateContest,
+  onlyForCustomer,
 } = require('../middlewares/basic.middleware');
 const { checkToken } = require('../middlewares/auth.middleware');
 const { updateContestFile, uploadLogoFiles } = require('../utils/fileUpload');
 const contest = Router();
 
 contest.post('/dataForContest', checkToken, dataForContest);
-contest.post('/getCustomersContests', checkToken, getCustomersContests);
+contest.post('/getCustomersContests', checkToken, onlyForCustomer, getCustomersContests);
 contest.get('/getContestById', checkToken, canGetContest, getContestById);
-contest.post('/getAllContests', checkToken, onlyForCreative, getContests);
+contest.post('/getCreativeContests', checkToken, onlyForCreative, getCreativeContests);
 contest.get('/downloadFile/:fileName', checkToken, downloadFile);
 contest.post('/updateContest', checkToken, updateContestFile, updateContest);
 contest.post(

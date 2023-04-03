@@ -1,10 +1,10 @@
 const http = require('http');
 const express = require('express');
 const cors = require('cors');
-require('./dbMongo/mongoose');
-const router = require('./router');
+const { connect } = require('./config/mongoose.config');
+const routes = require('./routes/index');
 const controller = require('./socketInit');
-const handlerError = require('./handlerError/handler');
+const errorHandler = require('./error.handler');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -12,12 +12,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/public', express.static('public'));
-app.use(router);
-app.use(handlerError);
+app.use(routes);
+app.use(errorHandler);
 
 const server = http.createServer(app);
-server.listen(PORT,
-  () => console.log(`Example app listening on port ${ PORT }!`));
+server.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}!`);
+});
+connect();
 controller.createConnection(server);
-
-

@@ -10,12 +10,21 @@ module.exports = {
       },
       {
         card_number: '4111111111111111',
-        name: 'yriy',
+        name: 'Creator',
         expiry: '09/23',
         cvc: '505',
+        balance: 0,
+      },
+      {
+        card_number: '4111111111111112',
+        name: 'Buyer',
+        expiry: '09/23',
+        cvc: '555',
         balance: 5000,
       },
     ], {});
   },
-
+  async down (queryInterface, Sequelize) {
+    await queryInterface.bulkDelete('banks', null, {});
+  }
 };

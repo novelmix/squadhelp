@@ -4,9 +4,9 @@ const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const configPath = env === 'production' ? path.join(__dirname, '..', '..', '..',
-  'src/server/config/postgresConfig.json') : path.join(__dirname, '..',
-  '/config/postgresConfig.json');
-const config = require(configPath)[ env ];
+  'src/server/config/postgres.config.js') : path.join(__dirname, '..',
+  '/config/postgres.config.js');
+const config = require(configPath)[ env ]; 
 const db = {};
 
 const sequelize = new Sequelize(config.database, config.username,

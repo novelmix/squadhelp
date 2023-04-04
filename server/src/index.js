@@ -1,7 +1,7 @@
 const http = require('http');
 const express = require('express');
 const cors = require('cors');
-const { connect } = require('./config/mongoose.config');
+const { connect } = require('./config/mongoose');
 const routes = require('./routes/index');
 const controller = require('./socketInit');
 const errorHandler = require('./error.handler');

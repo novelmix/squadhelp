@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const path = require('path');
 const env = process.env.NODE_ENV || 'development';
-const configPath = path.join(__dirname, '..', 'config/mongo.config.js');
+const configPath = path.join(__dirname, '..', 'config/mongo.js');
 const config = require(configPath)[ env ];
 
 const MONGO_URL = `mongodb://${ config.host }:${ config.port }/${ config.database }`;

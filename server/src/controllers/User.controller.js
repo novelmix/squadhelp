@@ -24,7 +24,7 @@ module.exports.changeMark = async (req, res, next) => {
   let avg = 0;
   let transaction;
   const { isFirst, offerId, mark, creatorId } = req.body;
-  const userId = req.tokenData.userId;
+  const userId = req.tokenData.id;
   try {
     transaction = await sequelize.transaction(
       { isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_UNCOMMITTED });
@@ -85,7 +85,7 @@ module.exports.payment = async (req, res, next) => {
         : Math.floor(req.body.price / req.body.contests.length);
       contest = Object.assign(contest, {
         status: index === 0 ? 'active' : 'pending',
-        userId: req.tokenData.userId,
+        userId: req.tokenData.id,
         priority: index + 1,
         orderId,
         createdAt: moment().format('YYYY-MM-DD HH:mm'),
@@ -107,7 +107,7 @@ module.exports.updateUser = async (req, res, next) => {
       req.body.avatar = req.file.filename;
     }
     const updatedUser = await updateUser(req.body,
-      req.tokenData.userId);
+      req.tokenData.id);
     res.send(returnUserFiends(updatedUser));
   } catch (err) {
     next(err);
@@ -120,7 +120,7 @@ module.exports.cashout = async (req, res, next) => {
     transaction = await sequelize.transaction();
     const updatedUser = await updateUser(
       { balance: sequelize.literal('balance - ' + req.body.sum) },
-      req.tokenData.userId, transaction);
+      req.tokenData.id, transaction);
     await updateBankBalance({
       balance: sequelize.literal(`CASE 
                 WHEN "card_number"='${ req.body.number.replace(/ /g,

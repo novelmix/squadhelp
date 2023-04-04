@@ -34,8 +34,8 @@ module.exports.findUser = async (predicate, transaction) => {
 
 module.exports.returnUserFiends = (user) => {
   return {
+    id: user.id,
     firstName: user.firstName,
-    userId: user.id,
     role: user.role,
     lastName: user.lastName,
     avatar: user.avatar,

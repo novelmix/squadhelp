@@ -12,7 +12,7 @@ module.exports.checkAuth = async (req, res, next) => {
   }
   try {
     const tokenData = await verifyAccessToken(accessToken);
-    const foundUser = await findUser({ id: tokenData.userId });
+    const foundUser = await findUser({ id: tokenData.id });
     res.send(returnUserFiends(foundUser));
   } catch (err) {
     next(new TokenError());

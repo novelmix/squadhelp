@@ -14,7 +14,7 @@ module.exports.setNewOffer = async (req, res, next) => {
   } else {
     obj.text = req.body.offerData;
   }
-  obj.userId = req.tokenData.userId;
+  obj.userId = req.tokenData.id;
   obj.contestId = req.body.contestId;
   try {
     const result = await createOffer(obj);
@@ -22,7 +22,7 @@ module.exports.setNewOffer = async (req, res, next) => {
     delete result.userId;
     controller.getNotificationController().emitEntryCreated(
       req.body.customerId);
-    const User = Object.assign({}, req.tokenData, { id: req.tokenData.userId });
+    const User = Object.assign({}, req.tokenData, { id: req.tokenData.id });
     res.send(Object.assign({}, result, { User }));
   } catch (e) {
     return next(new ServerError());

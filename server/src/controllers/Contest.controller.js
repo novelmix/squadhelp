@@ -1,30 +1,15 @@
-const { Contest, Select, Sequelize, sequelize, Rating, Offer, User } = require('../models');
+const { Contest, Rating, Offer, User } = require('../models');
 const { updateContest }= require('../services/contest.service');
-const CONSTANTS = require('../constants');
+const { findAllByTypes } = require('../services/select.service')
 const {createWhereForAllContests} = require('../utils/functions');
+const CONSTANTS = require('../constants');
 const ServerError = require('../errors/ServerError');
 
 module.exports.dataForContest = async (req, res, next) => {
-  const response = {};
   try {
     const { body: { characteristic1, characteristic2 } } = req;
     const types = [characteristic1, characteristic2, 'industry'].filter(Boolean);
-    const characteristics = await Select.findAll({
-      where: {
-        type: {
-          [ Sequelize.Op.or ]: types,
-        },
-      },
-    });
-    if (!characteristics) {
-      return next(new ServerError());
-    }
-    characteristics.forEach(characteristic => {
-      if (!response[ characteristic.type ]) {
-        response[ characteristic.type ] = [];
-      }
-      response[ characteristic.type ].push(characteristic.describe);
-    });
+    const response = await findAllByTypes(types)
     res.send(response);
   } catch (err) {
     next(new ServerError('cannot get contest preferences'));
@@ -55,7 +40,7 @@ module.exports.getContestById = async (req, res, next) => {
           model: Offer,
           required: false,
           where: req.tokenData.role === CONSTANTS.CREATOR
-            ? { userId: req.tokenData.userId }
+            ? { userId: req.tokenData.id }
             : {},
           attributes: { exclude: ['userId', 'contestId'] },
           include: [
@@ -74,7 +59,7 @@ module.exports.getContestById = async (req, res, next) => {
             {
               model: Rating,
               required: false,
-              where: { userId: req.tokenData.userId },
+              where: { userId: req.tokenData.id },
               attributes: { exclude: ['userId', 'offerId'] },
             },
           ],
@@ -109,7 +94,7 @@ module.exports.updateContest = async (req, res, next) => {
   try {
     const updatedContest = await updateContest(req.body, {
       id: contestId,
-      userId: req.tokenData.userId,
+      userId: req.tokenData.id,
     });
     res.send(updatedContest);
   } catch (e) {
@@ -120,10 +105,10 @@ module.exports.updateContest = async (req, res, next) => {
 module.exports.getCustomersContests = async (req, res, next) => {
   try {
     const {status} = req.headers;
-    const {userId} = req.tokenData;
+    const {id} = req.tokenData;
     const {limit, offset} = req.body;
     const contests = await Contest.findAll({
-      where: { status, userId },
+      where: { status, userId: id },
       limit,
       offset: offset ? offset : 0,
       order: [['id', 'DESC']],
@@ -145,7 +130,7 @@ module.exports.getCustomersContests = async (req, res, next) => {
 
 module.exports.getCreativeContests = async (req, res, next) => {
   try {
-    const {userId} = req.tokenData;
+    const {id} = req.tokenData;
     const {typeIndex, contestId, industry, awardSort, limit, offset, ownEntries} = req.body;
     const {where, order} = createWhereForAllContests(typeIndex, contestId, industry, awardSort);
     const contests = await Contest.findAll({ 
@@ -157,7 +142,7 @@ module.exports.getCreativeContests = async (req, res, next) => {
           {
             model: Offer,
             required: ownEntries,
-            where: ownEntries ? { userId } : {},
+            where: ownEntries ? { userId: id } : {},
             attributes: ['id'],
           },
         ],

@@ -21,7 +21,7 @@ module.exports.canGetContest = async (req, res, next) => {
   try {
     if (req.tokenData.role === CONSTANTS.CUSTOMER) {
       result = await Contest.findOne({
-        where: { id: req.headers.contestid, userId: req.tokenData.userId },
+        where: { id: req.headers.contestid, userId: req.tokenData.id },
       });
     } else if (req.tokenData.role === CONSTANTS.CREATOR) {
       result = await Contest.findOne({
@@ -86,7 +86,7 @@ module.exports.onlyForCustomerWhoCreateContest = async (req, res, next) => {
   try {
     const result = await Contest.findOne({
       where: {
-        userId: req.tokenData.userId,
+        userId: req.tokenData.id,
         id: req.body.contestId,
         status: CONSTANTS.CONTEST_STATUS_ACTIVE,
       },
@@ -104,7 +104,7 @@ module.exports.canUpdateContest = async (req, res, next) => {
   try {
     const result = Contests.findOne({
       where: {
-        userId: req.tokenData.userId,
+        userId: req.tokenData.id,
         id: req.body.contestId,
         status: { [ Sequelize.Op.not ]: CONSTANTS.CONTEST_STATUS_FINISHED },
       },

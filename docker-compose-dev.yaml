@@ -28,6 +28,7 @@ services:
       - mongo-dev
     volumes:
       - ./var/www/html/images:/var/www/html/images
+      - ./var/www/_logs/_logsDaily:/var/www/_logs/_logsDaily
       - ./server:/server
       - /server/node_modules
 

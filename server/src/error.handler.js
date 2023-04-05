@@ -1,4 +1,6 @@
 const { MulterError } = require('multer');
+const { errorLogger } = require('./config/winston');
+
 module.exports = (err, req, res, next) => {
   console.log(err);
   if (
@@ -17,6 +19,7 @@ module.exports = (err, req, res, next) => {
   if (!err.message || !err.code) {
     res.status(500).send('Server Error');
   } else {
+    errorLogger.error(err);
     res.status(err.code).send(err.message);
   }
 };

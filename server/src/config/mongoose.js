@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const path = require('path');
+const { errorLogger } = require('./winston')
 const env = process.env.NODE_ENV || 'development';
 const configPath = path.join(__dirname, '..', 'config/mongo.js');
 const config = require(configPath)[ env ];
@@ -13,6 +14,7 @@ module.exports.connect = async () => {
     await mongoose.connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
   } catch (error) {
     console.log(error);
+    errorLogger.error(error);
     process.exit(1);
   }
 };

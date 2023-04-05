@@ -1,7 +1,6 @@
 const { Contest, Rating, Offer, User } = require('../models');
-const { updateContest }= require('../services/contest.service');
+const { updateContest, createWhereForAllContests }= require('../services/contest.service');
 const { findAllByTypes } = require('../services/select.service')
-const {createWhereForAllContests} = require('../utils/functions');
 const CONSTANTS = require('../constants');
 const ServerError = require('../errors/ServerError');
 

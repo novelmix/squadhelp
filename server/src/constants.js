@@ -25,6 +25,7 @@ module.exports = {
   LOGS_DEFAULT_DIR: path.resolve(__dirname, '..', '_logs'),
   LOGS_DAILY_DEFAULT_DIR: '/_logsDaily',
   LOGS_FILENAME: 'error.log',
+  SCHEDULE_TIME: '00 00 09 * * *',
   SOCKET_CONNECTION: 'connection',
   SOCKET_SUBSCRIBE: 'subscribe',
   SOCKET_UNSUBSCRIBE: 'unsubscribe',

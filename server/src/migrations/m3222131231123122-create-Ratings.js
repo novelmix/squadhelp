@@ -1,23 +1,28 @@
-
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Ratings', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('ratings', {
       offerId: {
+        field: 'order_id',
         allowNull: false,
         primaryKey: true,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Offers',
-          key: 'id',
+          model: {
+            tableName: 'offers',
+            key: 'id',
+          },
         },
       },
       userId: {
+        field: 'user_id',
         type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
         references: {
-          model: 'Users',
-          key: 'id',
+          model: {
+            tableName: 'users',
+            key: 'id',
+          },
         },
       },
       mark: {
@@ -31,7 +36,7 @@ module.exports = {
       },
     });
   },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Ratings');
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('ratings');
   },
 };

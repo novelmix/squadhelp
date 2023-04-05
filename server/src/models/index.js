@@ -1,13 +1,12 @@
-
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const configPath = env === 'production' ? path.join(__dirname, '..', '..', '..',
-  'src/server/config/postgresConfig.json') : path.join(__dirname, '..',
-  '/config/postgresConfig.json');
-const config = require(configPath)[ env ];
+  'src/server/config/postgres.js') : path.join(__dirname, '..',
+  '/config/postgres.js');
+const config = require(configPath)[ env ]; 
 const db = {};
 
 const sequelize = new Sequelize(config.database, config.username,
@@ -24,29 +23,11 @@ fs
     db[ model.name ] = model;
   });
 
-db[ 'Contests' ].belongsTo(db[ 'Users' ],
-  { foreignKey: 'userId', sourceKey: 'id' });
-db[ 'Contests' ].hasMany(db[ 'Offers' ],
-  { foreignKey: 'contestId', targetKey: 'id' });
-
-db[ 'Users' ].hasMany(db[ 'Offers' ],
-  { foreignKey: 'userId', targetKey: 'id' });
-db[ 'Users' ].hasMany(db[ 'Contests' ],
-  { foreignKey: 'userId', targetKey: 'id' });
-db[ 'Users' ].hasMany(db[ 'Ratings' ],
-  { foreignKey: 'userId', targetKey: 'id' });
-
-db[ 'Offers' ].belongsTo(db[ 'Users' ],
-  { foreignKey: 'userId', sourceKey: 'id' });
-db[ 'Offers' ].belongsTo(db[ 'Contests' ],
-  { foreignKey: 'contestId', sourceKey: 'id' });
-db[ 'Offers' ].hasOne(db[ 'Ratings' ],
-  { foreignKey: 'offerId', targetKey: 'id' });
-
-db[ 'Ratings' ].belongsTo(db[ 'Users' ],
-  { foreignKey: 'userId', targetKey: 'id' });
-db[ 'Ratings' ].belongsTo(db[ 'Offers' ],
-  { foreignKey: 'offerId', targetKey: 'id' });
+Object.keys(db).forEach(modelName => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

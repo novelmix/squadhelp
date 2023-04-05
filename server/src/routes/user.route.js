@@ -14,7 +14,7 @@ const {
 const {
   validateContestCreation,
 } = require('../middlewares/validator.middleware');
-const { uploadContestFiles, uploadAvatar } = require('../utils/fileUpload');
+const { uploadContestFiles, uploadAvatar } = require('../config/multer');
 
 const user = Router();
 

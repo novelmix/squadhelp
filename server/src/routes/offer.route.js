@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { setNewOffer, setOfferStatus } = require('../controllers/Offer.controller')
 const { checkToken } = require('../middlewares/auth.middleware');
-const { uploadLogoFiles } = require('../utils/fileUpload')
+const { uploadLogoFiles } = require('../config/multer')
 const { canSendOffer, onlyForCustomerWhoCreateContest } = require('../middlewares/basic.middleware')
 
 const offer = Router();

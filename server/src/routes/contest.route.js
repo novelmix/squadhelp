@@ -13,7 +13,7 @@ const {
   onlyForCustomer,
 } = require('../middlewares/basic.middleware');
 const { checkToken } = require('../middlewares/auth.middleware');
-const { updateContestFile } = require('../utils/fileUpload');
+const { updateContestFile } = require('../config/multer');
 const contest = Router();
 
 contest.post('/dataForContest', checkToken, dataForContest);

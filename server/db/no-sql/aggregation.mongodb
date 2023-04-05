@@ -1,0 +1,2 @@
+use("shm-chat")
+db.messages.aggregate([{ $match: { body: { $regex: /(^:?|\s)[П-п]аровоз(\s|$:?)/gm } } }, { $count: "count" }])

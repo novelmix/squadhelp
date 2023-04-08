@@ -1,0 +1,78 @@
+.pricingSection
+  display: grid
+  grid-template-columns: repeat(2, 1fr)
+  margin: auto
+  max-width: 1280px
+  text-align: center
+  @media(max-width: 1200px)
+    max-width: 960px
+  @media(max-width: 920px)
+    max-width: 768px
+  @media(max-width: 768px)
+    grid-template-columns: repeat(1, 1fr)
+  .pricingElInfo
+    border: 1px solid #e7eaf3
+    border-radius: 5px
+    padding: 40px
+    box-shadow: 0 4px 11px #aeaeaec7
+    .pricingEl
+      display: flex
+      align-items: flex-start
+      gap: 10px
+      span
+        color: #0f60f6
+        font-weight: 600
+        background-color: #ebf2ff
+        padding: 5px 8px
+        border-radius: 50%
+      article
+        text-align: left
+      .pricingElInfoTitle
+        font-size: 20px
+        margin-bottom: 5px
+      .pricingElInfoText
+        margin: 10px 0
+        line-height: 20px
+        color: #77838f
+        a
+          text-decoration: none
+          color: #377dff
+          &:hover
+            color: #0f60f6
+  .pricingElQues
+    background-color: #377dff
+    box-shadow: 0 4px 11px #afa8a8c7
+    article
+      text-align: left
+      padding: 40px 50px
+      color: #fff
+      a
+        text-decoration: none
+        color: #fff
+        &:hover
+          color: #d2cbcb
+        &:hover::before
+          color: #d2cbcb
+      .pricingElQuesTitle
+        font-size: 30px
+        margin-bottom: 5px
+      .pricingElQuesText
+        margin: 10px 0
+        line-height: 20px
+      .pricingElQuesBtn
+        padding: 15px
+        border: none
+        border-radius: 20px
+        color: #0f60f6
+        transition: all 0.2s ease-in-out
+        &:hover
+          transform: translateY(-3px)
+          box-shadow: 0 4px 11px rgba(55, 125, 255, 0.35)
+      .pricingElTel
+        &::before
+          font-family: "Font Awesome 5 Free"
+          content: '\f095'
+          color: #fff
+          font-weight:900
+          padding-right: 10px
+

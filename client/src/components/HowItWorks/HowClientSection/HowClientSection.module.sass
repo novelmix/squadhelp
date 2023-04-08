@@ -1,0 +1,42 @@
+.clientSection
+  margin: auto
+  max-width: 1280px
+  text-align: center
+  padding: 30px
+  @media(max-width: 1200px)
+    max-width: 960px
+  @media(max-width: 920px)
+    max-width: 768px
+  .clientContainer
+    display: grid
+    grid-template-columns: 1fr 3fr
+    align-items: end
+    @media(max-width: 920px)
+      display: block
+    h6
+      font-size: 26px
+      font-weight: 600
+      @media(max-width: 920px)
+        display: none
+  .adv
+    display: flex
+    flex-direction: row
+    justify-content: space-around
+    align-items: center
+    margin-top:20px
+    .images
+      img
+        max-height: 40px
+        cursor: pointer
+      img:first-child
+        display: block
+      img:last-child
+        display: none
+      &:hover
+        img
+          max-height: 40px
+          cursor: pointer
+        img:first-child
+          display: none
+        img:last-child
+          display: block

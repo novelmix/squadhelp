@@ -1,0 +1,35 @@
+.faqSection
+  margin: auto
+  padding: 30px 10px
+  max-width: 1280px
+  @media(max-width: 1200px)
+    max-width: 960px
+  @media(max-width: 920px)
+    max-width: 768px
+  .faqContainer
+    display: grid
+    grid-template-columns: 1fr 2fr
+    gap: 20px
+    @media(max-width: 920px)
+      grid-template-columns: 1fr
+    .faqNav
+      background: #377dff
+      border-radius: 10px
+      height: 280px
+      width: 370px
+      @media(max-width: 920px)
+        width: auto
+      @media(max-width: 500px)
+        height: 200px
+    .faqList
+      padding: 30px
+      .faqListItem
+        margin: 30px
+        @media(max-width: 500px)
+          margin: 15px
+        .faqItemLink
+          font-size: 18px
+          text-decoration: none
+          color: rgba(255, 255, 255, 0.796)
+          &:hover
+            color: rgb(255, 255, 255)

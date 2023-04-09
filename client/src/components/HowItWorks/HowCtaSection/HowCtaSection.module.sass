@@ -1,0 +1,41 @@
+.ctaSection
+  background: rgb(28,141,238)
+  background: linear-gradient(297deg, rgba(28,141,238,1) 20%, rgba(43,41,148,1) 62%)
+  display: flex
+  position: relative
+  img
+    position: absolute
+    width: 195px
+    height: 145px
+    &:last-child
+      bottom: 0
+      right: 0
+  .ctaArticle
+    margin: 50px auto
+    max-width: 1280px
+    text-align: center
+    z-index: 20
+    @media(max-width: 1200px)
+      max-width: 960px
+    @media(max-width: 920px)
+      max-width: 768px
+    .ctaArticleTitle
+      font-size: 30px
+      font-weight: 600
+      color: #00dffc
+    .ctaArticleText
+      font-weight: 600
+      color: #fff
+      margin: 20px 0
+    .ctaArticleBtn
+      color: black
+      padding: 12px 10px
+      border-radius: 8px 
+      border: none
+      transition: all 0.2s ease-in-out
+      &:hover
+        transform: translateY(-3px)
+        box-shadow: 0 4px 11px rgb(55 125 255 / 35%)
+      &:active
+        box-shadow: 0 0 0 0 transparent
+        background-color: #045cff

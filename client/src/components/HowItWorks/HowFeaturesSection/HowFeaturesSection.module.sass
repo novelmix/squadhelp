@@ -1,0 +1,82 @@
+hr
+  border: 0
+  border-top: 1px solid #e7eaf3
+.featuresSection
+  margin: auto
+  max-width: 1280px
+  padding: 80px 15px 20px 15px
+  text-align: center
+  @media(max-width: 1200px)
+    max-width: 960px
+  @media(max-width: 920px)
+    max-width: 768px
+  .featuresImage
+    margin-bottom: 16px
+    width: 72px
+    height: 72px
+  .featuresTitle
+    margin: 20px 0
+    font-size: 32px
+    font-weight: 600
+    margin-bottom: 50px
+    @media(max-width: 1200px)
+      margin: 0
+  .featuresItems
+    display: grid
+    grid-template-columns: repeat(2, 1fr)
+    align-items: center
+    @media(max-width: 920px)
+      grid-template-columns: repeat(1, 1fr)
+    .featuresImage
+      width: 565px
+      height: 646px
+      @media(max-width: 1200px)
+        width: 365px
+        height: 446px
+      @media(max-width: 920px)
+        display: none
+    .featuresList
+      padding: 50px
+      @media(max-width: 1200px)
+        padding: 20px
+      .featuresListItem
+        position: relative
+        padding: 20px
+        margin: 40px 0
+        border: 1px solid #e7eaf3
+        border-radius: 10px
+        text-align: left
+        display: flex
+        align-items: center
+        gap: 20px
+        box-shadow: 0 4px 11px #aeaeaec7
+        color: #919aa4
+        @media(max-width: 920px)
+          margin: 15px 0
+          &::after
+            display: none
+          &::before
+            display: none
+        &::after
+          position: absolute
+          left: -41px
+          width: 0.0625rem
+          height: 150%
+          border-right: 1px solid #e7eaf3
+          content: ""
+        &::before
+          position: absolute
+          left: -40px
+          width: 30px
+          height: 1px
+          border-top: 1px solid #e7eaf3
+          content: ""
+        &:last-child::after
+          top: -104px
+        &:first-child::after
+          bottom: -104px
+        span
+          font-size: 3.5rem
+          font-weight: 300
+          line-height: 1.2
+          color: #377dff

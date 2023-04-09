@@ -1,0 +1,82 @@
+.howDoesSection
+  margin: auto
+  padding: 30px 10px
+  max-width: 1280px
+  @media(max-width: 1200px)
+    max-width: 960px
+  @media(max-width: 920px)
+    max-width: 768px
+  .howDoesMainContainer
+    display: flex
+    padding: 0 35px
+    .howDoesContainer
+      display: flex
+      flex-direction: column
+      justify-content: center
+      line-height: 28px
+      .howDoesTag
+        &::before
+          content: "World's #1 Naming Platform"
+          padding: 10px
+          border-radius: 100px
+          background: rgba(55,125,255,.1)
+          font-size: 11px
+          color: #377dff
+      .howDoesTitle
+        margin: 15px 0
+        font-size: 40px
+        font-weight: 600
+      .howDoesText
+        margin-bottom: 16px
+        font-size: 16px
+        font-weight: 400
+        color: #77838f
+      .frameContent
+        position: fixed
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        text-align: center
+        background: #2c282881
+        backdrop-filter: blur(10px)
+        z-index: 999
+        .frame
+          padding: 0
+          border: 0
+          margin-top: 5%
+          width: 75%
+          height: 75%
+          background-color: #000
+      .howDoesBtn
+        padding: 12px
+        border: none
+        border-radius: 100px
+        width: 150px
+        background-color: #377dff
+        color: white
+        font-size: 16px
+        font-weight: 500
+        line-height: 24px 
+        transition: all 0.2s ease-in-out
+        &:before
+          color: white
+          content: "\25B6"
+          padding-right: 10px
+        &:hover
+          transform: translateY(-3px)
+          box-shadow: 0 4px 11px #aeaeae83
+        &:active
+          box-shadow: 0 0 0 0 transparent
+          background-color: #045cff
+        @media(max-width: 500px)
+          width: auto
+    .howDoesImg
+      display: block
+      width: 600px
+      height: 437px
+      @media(max-width: 1200px)
+        width: 370px
+        height: 321px
+      @media(max-width: 920px)
+        display: none

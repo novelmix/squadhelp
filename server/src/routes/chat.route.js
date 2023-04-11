@@ -16,16 +16,16 @@ const { checkToken } = require('../middlewares/auth.middleware');
 
 const chat = Router();
 
+chat.get('/getPreview', checkToken, getPreview);
+chat.get('/getChat/:interlocutorId', checkToken, getChat);
 chat.post('/newMessage', checkToken, addMessage);
-chat.post('/getChat', checkToken, getChat);
-chat.post('/getPreview', checkToken, getPreview);
-chat.post('/blackList', checkToken, blackList);
-chat.post('/favorite', checkToken, favoriteChat);
+chat.patch('/changeChatBlock', checkToken, blackList);
+chat.patch('/changeChatFavorite', checkToken, favoriteChat);
 chat.post('/createCatalog', checkToken, createCatalog);
-chat.post('/updateNameCatalog', checkToken, updateNameCatalog);
-chat.post('/addNewChatToCatalog', checkToken, addNewChatToCatalog);
-chat.post('/removeChatFromCatalog', checkToken, removeChatFromCatalog);
-chat.post('/deleteCatalog', checkToken, deleteCatalog);
-chat.post('/getCatalogs', checkToken, getCatalogs);
+chat.patch('/updateNameCatalog/:catalogId', checkToken, updateNameCatalog);
+chat.put('/addNewChatToCatalog/:catalogId', checkToken, addNewChatToCatalog);
+chat.delete('/removeChatFromCatalog/:catalogId/:chatId', checkToken, removeChatFromCatalog);
+chat.delete('/deleteCatalog/:catalogId', checkToken, deleteCatalog);
+chat.get('/getCatalogList', checkToken, getCatalogs);
 
 module.exports = chat;

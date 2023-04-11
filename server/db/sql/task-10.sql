@@ -7,4 +7,4 @@ WITH cashback_customer_user as (
 SET balance = balance + cashback_customer_user.cashback
 FROM cashback_customer_user
 WHERE u.id = cashback_customer_user.user_id
-AND u."role" = 'customer'
+AND u.role = 'customer'

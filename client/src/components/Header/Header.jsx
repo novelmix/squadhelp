@@ -14,9 +14,17 @@ class Header extends React.Component {
   }
 
   logOut = () => {
-    localStorage.clear();
+    localStorage.removeItem('accessToken');
     this.props.clearUserStore();
     this.props.history.replace('/login');
+  };
+
+  countEvents = (array) => {
+    return array.filter(
+      (e) =>
+        Date.now() >= Date.parse(e.notificationTime) ||
+        Date.parse(e.notificationTime) > Date.parse(e.endedAt)
+    ).length;
   };
 
   startContests = () => {
@@ -52,6 +60,18 @@ class Header extends React.Component {
                   <span>My Account</span>
                 </Link>
               </li>
+              {this.props.data.role !== 'customer' ? null : (
+                <li>
+                  <Link to="/events" style={{ textDecoration: 'none' }}>
+                    <span>Events</span>
+                    {this.props.events && (
+                      <span className={styles.eventCount}>
+                        {this.countEvents(this.props.events) || null}
+                      </span>
+                    )}
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link
                   to="http:/www.google.com"
@@ -275,7 +295,10 @@ class Header extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => state.userStore;
+const mapStateToProps = (state) => {
+  const { userStore, eventsStore } = state;
+  return { ...userStore, ...eventsStore };
+};
 const mapDispatchToProps = (dispatch) => ({
   getUser: () => dispatch(getUser()),
   clearUserStore: () => dispatch(clearUserStore()),

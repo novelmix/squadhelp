@@ -1,0 +1,65 @@
+.eventContainer
+  width: 700px
+  @media(max-width: 1200px)
+    width: 600px
+  @media(max-width: 920px)
+    width: 450px
+  @media(max-width: 780px)
+    margin-left: 42px
+  @media(max-width: 530px)
+    width: 400px
+  @media(max-width: 460px)
+    width: 300px
+  .eventItem
+    position: relative 
+    padding: 10px 0
+    .eventProgressBar
+      position: absolute 
+      width: 700px
+      height: auto
+      z-index: -1
+      @media(max-width: 1200px)
+        width: 600px
+      @media(max-width: 920px)
+        width: 450px
+      @media(max-width: 530px)
+        width: 400px
+      @media(max-width: 460px)
+        width: 300px
+    a
+      position: absolute
+      left: -38px
+      top: 24px
+      transition: all 0.2s ease-in-out
+      font-size: 18px
+      &:hover
+        cursor: pointer
+        color: #e68080
+        transform: translateY(-3px)
+        box-shadow: 0 4px 11px #aeaeae83
+    article
+      position: relative
+      display: flex
+      height: auto
+      justify-content: space-between
+      align-items: center
+      padding: 15px
+      box-shadow: 0 4px 11px #aeaeae83
+      h3
+        font-size: 20px
+        font-weight: 600
+        overflow: hidden
+        width: 400px
+        text-overflow: ellipsis
+        @media(max-width: 1200px)
+          width: 200px
+        @media(max-width: 780px)
+          font-size: 16px
+      p
+        span
+          font-size: 18px
+          color: #aaaaaa
+          @media(max-width: 530px)
+            font-size: 12px
+          @media(max-width: 460px)
+            display: none

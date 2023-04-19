@@ -102,6 +102,7 @@ export default {
     typeOfTagline: yup.string().min(1),
     brandStyle: yup.string().min(1),
     file: yup.mixed(),
+    url: yup.string().min(1)
   }),
   filterSchem: yup.object().shape({
     typeIndex: yup.number().oneOf[(1, 2, 3, 4, 5, 6, 7)],
@@ -216,7 +217,7 @@ export default {
       .required('required'),
   }),
   CatalogSchema: yup.object({
-    catalogName: yup
+    name: yup
       .string()
       .test(
         'test-catalogName',

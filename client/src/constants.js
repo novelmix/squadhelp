@@ -45,6 +45,23 @@ export default {
     'a Product',
     'a Startup',
   ],
+  BUTTON_GROUP: [
+    {
+      title: 'Yes',
+      text: 'But minor variations are allowed',
+      value: 'yes',
+    },
+    {
+      title: 'Yes',
+      text: 'The Domain should exactly match the name',
+      value: 'asname',
+    },
+    {
+      title: 'No',
+      text: 'I am only looking for a name, not a Domain',
+      value: 'no',
+    },
+  ],
   FooterItems: [
     {
       title: 'SQUADHELP',

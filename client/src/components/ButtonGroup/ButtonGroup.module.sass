@@ -1,0 +1,61 @@
+.btnGroupContainer
+  display: flex
+  align-items: center
+  justify-content: center
+  flex-direction: row
+  gap: 15px
+  margin: 25px 0
+  @media(max-width: 1020px)
+    flex-direction: column
+  .btnGroupLabel
+    cursor: pointer
+    .btnGroupinput[type="radio"]
+      display: none
+      & ~ article
+        position: relative
+        color: #727272
+        border: 2px solid #eeeeee
+        border-radius: 5px
+        padding: 16px
+        box-shadow: 0 4px 11px #aeaeae83
+        transition: all 0.2s ease-in-out
+        &:hover
+          transform: translateY(-5px)
+      &[value='yes'] ~ article::before
+        position: absolute
+        content: 'Recommended'
+        top: -14px
+        left: 100px
+        color: #307ff7
+        background-color: #deeafe
+        padding: 6px
+        font-size: 15px
+        font-weight: 600
+        border-radius: 5px
+      &:checked ~ article
+        border-color: #307df6
+        border-width: 2px
+        transform: translateY(-5px)
+        &::after
+          content: "\2713"
+          background-size: 30px auto
+          border-radius: 50%
+          width: 30px
+          height: 30px
+          position: absolute
+          top: 2px
+          right: 2px
+          color: #307df6
+          font-size: 25px
+      &:checked ~ article h4
+        color: #000000
+    article
+      width: 275px
+      text-align: center
+      h4
+        font-size: 20px
+        font-weight: 600
+        margin: 0 0 8px 0
+      p
+        font-size: 13px
+        line-height: 20px

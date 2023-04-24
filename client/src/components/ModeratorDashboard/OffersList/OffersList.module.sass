@@ -1,0 +1,107 @@
+.creativeInfoContainer
+  margin: auto
+  padding: 30px 10px
+  max-width: 1280px
+  @media(max-width: 1200px)
+    max-width: 960px
+  @media(max-width: 920px)
+    max-width: 768px
+  .creativeInfoContainer
+    display: flex
+    flex-direction: row
+    align-items: center
+    justify-content: flex-start
+    border: 1px solid silver
+    margin: 5px 0
+    box-shadow: 0 4px 11px #aeaeae83
+    @media(max-width: 800px)
+      flex-wrap: wrap
+      justify-content: space-between
+    @media(max-width: 400px)
+      justify-content: space-around
+      flex-direction: column
+    .nameAndEmail
+      display: flex
+      flex-direction: column
+      align-items: flex-start
+      justify-content: flex-start
+      span
+        color: #556da5
+        font-size: 16px
+        font-weight: 500
+        margin-left: 10px
+        @media(max-width: 400px)
+          font-size: 14px
+          margin: 2px 0
+    img
+      width: 50px
+      height: 50px
+      border-radius: 25px
+    .responseConainer
+      width: 70%
+      align-self: center
+      display: flex
+      flex-direction: column
+      justify-content: flex-start
+      align-items: center
+      @media(max-width: 800px)
+        width: 50%
+      @media(max-width: 400px)
+        width: 100%
+      .responseLogo
+        width: auto
+        height: 50px
+        border-radius: 0
+        cursor: pointer
+        @media(max-width: 400px)
+          margin: 5px 0
+      .response
+        text-align: center
+        overflow-wrap: break-word
+        align-self: stretch
+        margin-left: 10px
+        color: #556da5
+        margin-bottom: 10px
+        font-size: 18px
+        @media(max-width: 400px)
+          font-size: 15px
+          margin: 5px 0
+    .btnsContainer
+      margin: 5px 0
+      align-self: stretch
+      display: flex
+      flex-direction: row
+      align-items: center
+      justify-content: space-around
+      @media(max-width: 800px)
+        margin: 10px 0
+        flex: 1
+      .resolveBtn
+        width: 100px
+        cursor: pointer
+        text-align: center
+        padding: 10px
+        border-radius: 8px
+        background-color: #8aca6b
+        color: white
+        @media(max-width: 400px)
+          width: 70px
+          padding: 6px
+        &:hover
+          background-color: rgba(138, 202, 107, 0.7)
+      .rejectBtn
+        text-align: center
+        cursor: pointer
+        width: 100px
+        padding: 10px
+        border-radius: 8px
+        background-color: #CD5C5C
+        color: white
+        margin: 0 25px
+        @media(max-width: 800px)
+          margin: 0
+        @media(max-width: 400px)
+          width: 70px
+          padding: 6px
+        &:hover
+          background-color: rgba(205, 92, 92, 0.7)

@@ -1,0 +1,31 @@
+
+.spinnerContainer
+  display: flex
+  flex: 1
+  align-items: center
+  justify-content: flex-start
+  margin-top: 20px
+.pagination 
+  display: flex
+  justify-content: center
+  align-items: center
+  list-style: none
+  cursor: pointer
+  a
+    padding: 10px 16px
+    border: 1px solid #ddd
+    color: rgb(69, 90, 137)
+    transition: background-color .3s
+    font-size: 18px
+    @media(max-width: 400px)
+      font-size: 14px
+      padding: 5px 8px
+    &:hover:not(.pagination__link_active a, .pagination__link_disabled a)
+      background-color: rgb(198, 197, 202)
+.pagination__link
+  font-weight: 600
+.pagination__link_active a
+  color: #fff
+  background-color: rgb(69, 90, 137)
+.pagination__link_disabled a
+  color: rgb(198, 197, 202)

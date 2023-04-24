@@ -40,7 +40,7 @@ module.exports.getContestById = async (req, res, next) => {
           required: false,
           where: req.tokenData.role === CONSTANTS.CREATOR
             ? { userId: req.tokenData.id }
-            : {},
+            : {moderatorStatus: 'confirmed'},
           attributes: { exclude: ['userId', 'contestId'] },
           include: [
             {
@@ -116,6 +116,7 @@ module.exports.getCustomersContests = async (req, res, next) => {
           model: Offer,
           required: false,
           attributes: ['id'],
+          where: {moderatorStatus: 'confirmed'}
         },
       ],
     })

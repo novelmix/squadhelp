@@ -57,6 +57,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: 'pending',
       },
+      moderatorStatus: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: 'pending',
+      },
     },
     {
       sequelize,

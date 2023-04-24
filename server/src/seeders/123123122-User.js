@@ -23,6 +23,14 @@ module.exports = {
           email: 'ct@test.test',
           role: 'creator',
         },
+        {
+          first_name: 'Moderator',
+          last_name: 'Test',
+          display_name: 'MT',
+          password: hashPassword,
+          email: 'mt@test.test',
+          role: 'moderator',
+        },
       ],
       {}
     );

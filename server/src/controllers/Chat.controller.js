@@ -34,8 +34,8 @@ module.exports.getPreview = async (req, res, next) => {
       );
     });
     const senders = await findUsersForPreviewChat(interlocutors);
-    const previeObj = returnPreviewObj(conversations, senders);
-    res.send(previeObj);
+    const preview = returnPreviewObj(conversations, senders);
+    res.status(200).send(preview);
   } catch (err) {
     next(err);
   }
@@ -48,12 +48,14 @@ module.exports.getChat = async (req, res, next) => {
     const participants = [id, interlocutorId].sort((p1, p2) => p1 - p2);
     const conversation = await findConversation({ participants });
     const interlocutor = await findUser({ id: interlocutorId });
-    res.send(
-      returnChatObj(
-        conversation ? await conversation.getMessages() : [],
-        interlocutor
-      )
-    );
+    res
+      .status(200)
+      .send(
+        returnChatObj(
+          conversation ? await conversation.getMessages() : [],
+          interlocutor
+        )
+      );
   } catch (err) {
     next(err);
   }
@@ -107,7 +109,7 @@ module.exports.addMessage = async (req, res, next) => {
       return [message, preview];
     });
     const [message, preview] = result;
-    res.send({
+    res.status(201).send({
       message,
       preview: { ...preview, interlocutor },
     });
@@ -137,7 +139,7 @@ module.exports.blackList = async (req, res, next) => {
 
       return conversation;
     });
-    res.send(result);
+    res.status(200).send(result);
   } catch (err) {
     next(err);
   }
@@ -205,7 +207,7 @@ module.exports.getCatalogs = async (req, res, next) => {
       catalog.chats = catalog.Conversations.map((c) => c.id);
       delete catalog.Conversations;
     });
-    res.send(catalogs);
+    res.status(200).send(catalogs);
   } catch (err) {
     next(err);
   }

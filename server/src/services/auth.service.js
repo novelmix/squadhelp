@@ -3,7 +3,7 @@ const { promisify } = require('util');
 const { sign, verify } = require('jsonwebtoken');
 const { returnUserFiends } = require('./user.service');
 const CONSTANTS = require('../constants');
-const NotFound = require('../errors/UserNotFoundError');
+const UncorrectPassword = require('../errors/UncorrectPassword');
 
 const promisifyJWTSing = promisify(sign);
 const promisifyJWTVerify = promisify(verify);
@@ -20,6 +20,6 @@ module.exports.verifyAccessToken = async (accesstoken) =>
 module.exports.passwordCompare = async (userPassword, foundUserPassword) => {
   const passwordCompare = await bcrypt.compare(userPassword, foundUserPassword);
   if (!passwordCompare) {
-    throw new NotFound('Wrong password');
+    throw new UncorrectPassword('Wrong password');
   }
 };

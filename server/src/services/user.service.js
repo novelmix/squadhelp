@@ -1,5 +1,5 @@
 const { User } = require('../models');
-const UserNotFoundError = require('../errors/UserNotFoundError');
+const NotFoundError = require('../errors/NotFoundError');
 const ServerError = require('../errors/ServerError');
 
 module.exports.userCreation = async (data) => {
@@ -26,7 +26,7 @@ module.exports.updateUser = async (data, userId, transaction) => {
 module.exports.findUser = async (predicate, transaction) => {
   const result = await User.findOne({ where: predicate, transaction });
   if (!result) {
-    throw new UserNotFoundError('user with this data didn`t exist');
+    throw new NotFoundError('user with this data didn`t exist');
   } else {
     return result.get({ plain: true });
   }

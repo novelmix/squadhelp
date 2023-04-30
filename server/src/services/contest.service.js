@@ -28,10 +28,26 @@ module.exports.updateContestStatus = async (data, predicate, transaction) => {
   }
 };
 
-module.exports.createWhereForAllContests = (typeIndex, contestId, industry,awardSort) => {
+module.exports.createWhereForAllContests = (
+  typeIndex,
+  contestId,
+  industry,
+  awardSort,
+  ownEntries
+) => {
   const object = {
     where: {},
     order: [],
+  };
+  const status = {
+    status: ownEntries
+      ? {
+          [Sequelize.Op.or]: [
+            CONSTANTS.CONTEST_STATUS_FINISHED,
+            CONSTANTS.CONTEST_STATUS_ACTIVE,
+          ],
+        }
+      : CONSTANTS.CONTEST_STATUS_ACTIVE,
   };
   if (typeIndex) {
     Object.assign(object.where, { contestType: getPredicateTypes(typeIndex) });
@@ -45,14 +61,7 @@ module.exports.createWhereForAllContests = (typeIndex, contestId, industry,award
   if (awardSort) {
     object.order.push(['prize', awardSort]);
   }
-  Object.assign(object.where, {
-    status: {
-      [Sequelize.Op.or]: [
-        CONSTANTS.CONTEST_STATUS_FINISHED,
-        CONSTANTS.CONTEST_STATUS_ACTIVE,
-      ],
-    },
-  });
+  Object.assign(object.where, status);
   object.order.push(['id', 'desc']);
   return object;
 };
@@ -61,4 +70,25 @@ const getPredicateTypes = (index) => {
   return {
     [Sequelize.Op.or]: [CONSTANTS.TYPES_FOR_CONTESTS[index].split(',')],
   };
+};
+
+module.exports.getCharacteristics = (contestType) => {
+  let characteristic1;
+  let characteristic2;
+  switch (contestType) {
+    case CONSTANTS.NAME_CONTEST: {
+      (characteristic1 = 'nameStyle'), (characteristic2 = 'typeOfName');
+      break;
+    }
+    case CONSTANTS.TAGLINE_CONTEST: {
+      characteristic1 = 'typeOfTagline';
+      break;
+    }
+    case CONSTANTS.LOGO_CONTEST: {
+      characteristic1 = 'brandStyle';
+      break;
+    }
+    default:
+  }
+  return { characteristic1, characteristic2 };
 };

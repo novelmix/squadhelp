@@ -1,15 +1,25 @@
 const { Contest, Rating, Offer, User } = require('../models');
-const { updateContest, createWhereForAllContests }= require('../services/contest.service');
-const { findAllByTypes } = require('../services/select.service')
+const {
+  updateContest,
+  createWhereForAllContests,
+  getCharacteristics,
+} = require('../services/contest.service');
+const { findAllByTypes } = require('../services/select.service');
 const CONSTANTS = require('../constants');
 const ServerError = require('../errors/ServerError');
 
 module.exports.dataForContest = async (req, res, next) => {
   try {
-    const { body: { characteristic1, characteristic2 } } = req;
-    const types = [characteristic1, characteristic2, 'industry'].filter(Boolean);
-    const response = await findAllByTypes(types)
-    res.send(response);
+    const {
+      params: { contestType },
+    } = req;
+    const { characteristic1, characteristic2 } =
+      getCharacteristics(contestType);
+    const types = [characteristic1, characteristic2, 'industry'].filter(
+      Boolean
+    );
+    const response = await findAllByTypes(types);
+    res.status(200).send(response);
   } catch (err) {
     next(new ServerError('cannot get contest preferences'));
   }
@@ -18,41 +28,30 @@ module.exports.dataForContest = async (req, res, next) => {
 module.exports.getContestById = async (req, res, next) => {
   try {
     let contestInfo = await Contest.findOne({
-      where: { id: req.headers.contestid },
-      order: [
-        [Offer, 'id', 'asc'],
-      ],
+      where: { id: req.params.contestId },
+      order: [[Offer, 'id', 'asc']],
       include: [
         {
           model: User,
           required: true,
           attributes: {
-            exclude: [
-              'password',
-              'role',
-              'balance',
-              'accessToken',
-            ],
+            exclude: ['password', 'role', 'balance', 'accessToken'],
           },
         },
         {
           model: Offer,
           required: false,
-          where: req.tokenData.role === CONSTANTS.CREATOR
-            ? { userId: req.tokenData.id }
-            : {moderatorStatus: 'confirmed'},
+          where:
+            req.tokenData.role === CONSTANTS.CREATOR
+              ? { userId: req.tokenData.id }
+              : { moderatorStatus: 'confirmed' },
           attributes: { exclude: ['userId', 'contestId'] },
           include: [
             {
               model: User,
               required: true,
               attributes: {
-                exclude: [
-                  'password',
-                  'role',
-                  'balance',
-                  'accessToken',
-                ],
+                exclude: ['password', 'role', 'balance', 'accessToken'],
               },
             },
             {
@@ -66,21 +65,25 @@ module.exports.getContestById = async (req, res, next) => {
       ],
     });
     contestInfo = contestInfo.get({ plain: true });
-    contestInfo.Offers.forEach(offer => {
+    contestInfo.Offers.forEach((offer) => {
       if (offer.Rating) {
         offer.mark = offer.Rating.mark;
       }
       delete offer.Rating;
     });
-    res.send(contestInfo);
+    res.status(200).send(contestInfo);
   } catch (e) {
     next(new ServerError());
   }
 };
 
 module.exports.downloadFile = async (req, res, next) => {
-  const file = CONSTANTS.CONTESTS_DEFAULT_DIR + req.params.fileName;
-  res.download(file);
+  try {
+    const file = CONSTANTS.CONTESTS_DEFAULT_DIR + req.params.fileName;
+    res.status(200).download(file);
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports.updateContest = async (req, res, next) => {
@@ -95,7 +98,7 @@ module.exports.updateContest = async (req, res, next) => {
       id: contestId,
       userId: req.tokenData.id,
     });
-    res.send(updatedContest);
+    res.status(200).send(updatedContest);
   } catch (e) {
     next(e);
   }
@@ -103,54 +106,64 @@ module.exports.updateContest = async (req, res, next) => {
 
 module.exports.getCustomersContests = async (req, res, next) => {
   try {
-    const {status} = req.headers;
-    const {id} = req.tokenData;
-    const {limit, offset} = req.body;
+    const { status } = req.params;
+    const { id } = req.tokenData;
+    const { pagination } = req;
     const contests = await Contest.findAll({
       where: { status, userId: id },
-      limit,
-      offset: offset ? offset : 0,
       order: [['id', 'DESC']],
       include: [
         {
           model: Offer,
           required: false,
           attributes: ['id'],
-          where: {moderatorStatus: 'confirmed'}
+          where: { moderatorStatus: 'confirmed' },
         },
       ],
-    })
-    contests => {contests.forEach(contest => contest.dataValues.count = contest.dataValues.Offers.length)}; 
+      ...pagination,
+    });
+    contests.forEach(
+      (contest) => (contest.dataValues.count = contest.dataValues.Offers.length)
+    );
     const haveMore = contests.length === 0 ? false : true;
-    res.send({ contests, haveMore });
+    res.status(200).send({ contests, haveMore });
   } catch (error) {
-    next(new ServerError(error));
+    next(new ServerError(error.message));
   }
 };
 
 module.exports.getCreativeContests = async (req, res, next) => {
   try {
-    const {id} = req.tokenData;
-    const {typeIndex, contestId, industry, awardSort, limit, offset, ownEntries} = req.body;
-    const {where, order} = createWhereForAllContests(typeIndex, contestId, industry, awardSort);
-    const contests = await Contest.findAll({ 
-        where,
-        order,
-        limit,
-        offset: offset ? offset : 0,
-        include: [
-          {
-            model: Offer,
-            required: ownEntries,
-            where: ownEntries ? { userId: id } : {},
-            attributes: ['id'],
-          },
-        ],
-      });
-      contests => {contests.forEach(contest => contest.dataValues.count = contest.dataValues.Offers.length)}; 
-      const haveMore = contests.length === 0 ? false : true;
-      res.send({ contests, haveMore });
+    const { id } = req.tokenData;
+    const { typeIndex, contestId, industry, awardSort, ownEntries } = req.query;
+    const { pagination } = req;
+    const boolean = JSON.parse(ownEntries);
+    const { where, order } = createWhereForAllContests(
+      typeIndex,
+      contestId,
+      industry,
+      awardSort,
+      boolean
+    );
+    const contests = await Contest.findAll({
+      where,
+      order,
+      include: [
+        {
+          model: Offer,
+          required: boolean,
+          where: boolean ? { userId: id } : {},
+          attributes: ['id'],
+        },
+      ],
+      ...pagination,
+    });
+    contests.forEach(
+      (contest) => (contest.dataValues.count = contest.dataValues.Offers.length)
+    );
+    const haveMore = contests.length === 0 ? false : true;
+    res.status(200).send({ contests, haveMore });
   } catch (error) {
-    next(new ServerError(error));
+    next(new ServerError(error.message));
   }
 };

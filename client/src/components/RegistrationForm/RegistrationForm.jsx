@@ -101,12 +101,14 @@ class RegistrationForm extends React.Component {
                 classes={formInputClasses}
                 type='password'
                 label='Password'
+                autoComplete="off"
               />
               <FormInput
                 name='confirmPassword'
                 classes={formInputClasses}
                 type='password'
                 label='Password confirmation'
+                autoComplete="off"
               />
             </div>
             <div className={styles.choseRoleContainer}>

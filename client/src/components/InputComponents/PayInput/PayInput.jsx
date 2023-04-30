@@ -7,7 +7,6 @@ const PayInput = props => {
   const { label, changeFocus, classes, isInputMask, mask } = props;
   const [field, meta, helpers] = useField(props.name);
   const { touched, error } = meta;
-
   if (field.name === 'sum') {
     return (
       <div className={classes.container}>
@@ -19,7 +18,7 @@ const PayInput = props => {
           })}
         />
         {touched && error && (
-          <span className={classes.error}>{error.message}!</span>
+          <span className={classes.error}>{error}!</span>
         )}
       </div>
     );
@@ -38,7 +37,7 @@ const PayInput = props => {
           onFocus={() => changeFocus(field.name)}
         />
         {touched && error && (
-          <span className={classes.error}>{error.message}!</span>
+          <span className={classes.error}>{error}!</span>
         )}
       </div>
     );
@@ -54,7 +53,7 @@ const PayInput = props => {
         onFocus={() => changeFocus(field.name)}
       />
       {touched && error && (
-        <span className={classes.error}>{error.message}!</span>
+        <span className={classes.error}>{error}!</span>
       )}
     </div>
   );

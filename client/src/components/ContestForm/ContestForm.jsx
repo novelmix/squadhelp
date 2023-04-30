@@ -35,18 +35,15 @@ class ContestForm extends React.Component {
     const { contestType } = this.props;
     switch (contestType) {
       case CONSTANTS.NAME_CONTEST: {
-        this.props.getData({
-          characteristic1: 'nameStyle',
-          characteristic2: 'typeOfName',
-        });
+        this.props.getData(CONSTANTS.NAME_CONTEST);
         break;
       }
       case CONSTANTS.TAGLINE_CONTEST: {
-        this.props.getData({ characteristic1: 'typeOfTagline' });
+        this.props.getData(CONSTANTS.TAGLINE_CONTEST);
         break;
       }
       case CONSTANTS.LOGO_CONTEST: {
-        this.props.getData({ characteristic1: 'brandStyle' });
+        this.props.getData(CONSTANTS.LOGO_CONTEST);
         break;
       }
     }
@@ -79,7 +76,7 @@ class ContestForm extends React.Component {
               ...this.props.initialValues,
             }}
             onSubmit={this.props.handleSubmit}
-            validationSchema={Schems.ContestSchem}
+            validationSchema={this.props.contestType == CONSTANTS.NAME_CONTEST ? Schems.ContestSchemName : Schems.ContestSchem}
             innerRef={this.props.formRef}
             enableReinitialize
           >

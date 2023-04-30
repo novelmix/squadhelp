@@ -14,6 +14,7 @@ const initialState = {
   error: null,
   offers: [],
   lastPageNumber: 0,
+  count: 0
 };
 
 const getOffers = decorateAsyncThunk({
@@ -23,17 +24,17 @@ const getOffers = decorateAsyncThunk({
     const offset = pageNumber * limit;
     const {
       data: { offers, count },
-    } = await restController.getOffers(limit, offset);
+    } = await restController.getOffers({ limit, offset });
     const lastPageNumber = Math.ceil(count / MAX_LIMIT);
-    return { offers, lastPageNumber };
+    return { offers, lastPageNumber, count };
   },
 });
 
 const updateOfferForModerator = decorateAsyncThunk({
   key: `${OFFER_SLICE_NAME}/updateOfferForModerator`,
-  thunk: async (payload, { dispatch }) => {
+  thunk: async (payload, { dispatch, getState }) => {
     await restController.updateOfferForModerator(payload);
-    dispatch(getOffers(payload.pageNumber));
+      dispatch(getOffers(payload.pageNumber));
   },
 });
 
@@ -51,6 +52,7 @@ const offerSlice = createSlice({
       state.isFetching = false;
       state.offers = payload.offers;
       state.lastPageNumber = payload.lastPageNumber;
+      state.count = payload.count;
     });
     builder.addCase(getOffers.rejected, rejectedReducer);
     builder.addCase(updateOfferForModerator.pending, pendingReducer);

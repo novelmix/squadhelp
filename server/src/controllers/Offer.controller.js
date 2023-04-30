@@ -1,11 +1,15 @@
 const { sequelize, Offer, User } = require('../models');
 const controller = require('../socketInit');
 const { updateContestStatus } = require('../services/contest.service');
-const {createOffer, updateOffer, updateOfferStatus} = require('../services/offer.service');
+const {
+  createOffer,
+  updateOffer,
+  updateOfferStatus,
+} = require('../services/offer.service');
 const { updateUser, findUser } = require('../services/user.service');
 const CONSTANTS = require('../constants');
 const ServerError = require('../errors/ServerError');
-const { sendEmailForCreatorByModerator } = require('../utils/sendEmail')
+const { sendEmailForCreatorByModerator } = require('../utils/sendEmail');
 
 module.exports.setNewOffer = async (req, res, next) => {
   const obj = {};
@@ -16,7 +20,7 @@ module.exports.setNewOffer = async (req, res, next) => {
     obj.text = req.body.offerData;
   }
   obj.userId = req.tokenData.id;
-  obj.contestId = req.body.contestId;
+  obj.contestId = req.params.contestId;
   try {
     const result = await createOffer(obj);
     delete result.contestId;
@@ -25,7 +29,7 @@ module.exports.setNewOffer = async (req, res, next) => {
       .getNotificationController()
       .emitEntryCreated(req.body.customerId);
     const User = Object.assign({}, req.tokenData, { id: req.tokenData.id });
-    res.send(Object.assign({}, result, { User }));
+    res.status(201).send(Object.assign({}, result, { User }));
   } catch (e) {
     return next(new ServerError());
   }
@@ -88,7 +92,6 @@ const resolveOffer = async (
     },
     transaction
   );
-  transaction.commit();
   const arrayRoomsId = [];
   updatedOffers.forEach((offer) => {
     if (
@@ -108,11 +111,12 @@ const resolveOffer = async (
   controller
     .getNotificationController()
     .emitChangeOfferStatus(creatorId, 'Someone of your offers WIN', contestId);
-  return updatedOffers[0].dataValues;
+  return updatedOffers.filter(
+    (offer) => offer.status === CONSTANTS.OFFER_STATUS_WON
+  )[0].dataValues;
 };
 
 module.exports.setOfferStatus = async (req, res, next) => {
-  let transaction;
   if (req.body.command === 'reject') {
     try {
       const offer = await rejectOffer(
@@ -120,24 +124,25 @@ module.exports.setOfferStatus = async (req, res, next) => {
         req.body.creatorId,
         req.body.contestId
       );
-      res.send(offer);
+      res.status(200).send(offer);
     } catch (err) {
       next(err);
     }
   } else if (req.body.command === 'resolve') {
     try {
-      transaction = await sequelize.transaction();
-      const winningOffer = await resolveOffer(
-        req.body.contestId,
-        req.body.creatorId,
-        req.body.orderId,
-        req.body.offerId,
-        req.body.priority,
-        transaction
-      );
-      res.send(winningOffer);
+      const result = await sequelize.transaction(async (t) => {
+        const winningOffer = await resolveOffer(
+          req.body.contestId,
+          req.body.creatorId,
+          req.body.orderId,
+          req.body.offerId,
+          req.body.priority,
+          t
+        );
+        return winningOffer;
+      });
+      res.status(200).send(result);
     } catch (err) {
-      transaction.rollback();
       next(err);
     }
   }
@@ -154,7 +159,7 @@ module.exports.getOffersForModerator = async (req, res, next) => {
           model: User,
         },
       ],
-      ...pagination
+      ...pagination,
     });
     const count = await Offer.count({
       where: { moderatorStatus: 'pending' },
@@ -167,9 +172,15 @@ module.exports.getOffersForModerator = async (req, res, next) => {
 
 module.exports.updateOfferForModerator = async (req, res, next) => {
   try {
-    const {params: { offerId: id }, body: { status }} = req;
-    const [offer] = await updateOfferStatus({ moderatorStatus: status }, { id });
-    const user = await findUser({id: offer.userId})
+    const {
+      params: { offerId: id },
+      body: { status },
+    } = req;
+    const [offer] = await updateOfferStatus(
+      { moderatorStatus: status },
+      { id }
+    );
+    const user = await findUser({ id: offer.userId });
     delete user.password;
     delete user.accessToken;
     const contest = await offer.getContest();
@@ -181,8 +192,8 @@ module.exports.updateOfferForModerator = async (req, res, next) => {
       status: offer.moderatorStatus,
       text: offer.text,
       file: offer.fileName,
-    }
-    await sendEmailForCreatorByModerator(options)
+    };
+    await sendEmailForCreatorByModerator(options);
     res.status(200).end();
   } catch (error) {
     next(error);

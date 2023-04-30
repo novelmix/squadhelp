@@ -1,7 +1,7 @@
 const ejs = require('ejs');
 const path = require('path');
 const { transporter } = require('../config/mailer');
-const { errorLogger } = require('../config/winston');
+const { errorLogger } = require('./errorLogger');
 const CONSTANTS = require('../constants');
 const from =
   process.env.NODE_ENV === 'production' ? '' : CONSTANTS.MAIL_SEND_DEV;
@@ -11,7 +11,10 @@ module.exports.sendEmailForCreatorByModerator = async (options) => {
     __dirname,
     '../templates/email/forCreationByModerator.ejs'
   );
-  const html = await ejs.renderFile(file, {options, url: CONSTANTS.publicURL});
+  const html = await ejs.renderFile(file, {
+    options,
+    url: CONSTANTS.publicURL,
+  });
   const emailOptions = {
     from,
     to: options.email,

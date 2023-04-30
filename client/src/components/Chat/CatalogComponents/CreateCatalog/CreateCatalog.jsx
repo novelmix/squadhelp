@@ -10,7 +10,7 @@ const CreateCatalog = (props) => {
   const click = (values) => {
     const { createCatalog } = props;
     const { addChatId } = props;
-    createCatalog({ catalogName: values.catalogName, chatId: addChatId });
+    createCatalog({ catalogName: values.name, chatId: addChatId });
   };
   return (
     <Formik
@@ -20,7 +20,7 @@ const CreateCatalog = (props) => {
     >
       <Form className={styles.form}>
         <FormInput
-          name="catalogName"
+          name="name"
           type="text"
           label="name of catalog"
           classes={{

@@ -9,6 +9,7 @@ import PayInput from '../InputComponents/PayInput/PayInput';
 import Schems from '../../utils/validators/validationSchems';
 
 const PayForm = (props) => {
+  const { focusOnElement, isPayForOrder } = props;
   const changeFocusOnCard = (name) => {
     props.changeFocusOnCard(name);
   };
@@ -16,13 +17,19 @@ const PayForm = (props) => {
   const pay = (values) => {
     props.sendRequest(values);
   };
-
-  const { focusOnElement, isPayForOrder } = props;
+  const cashOut ={
+    focusOnElement: '',
+    name: '',
+    number: '',
+    sum: '',
+    cvc: '',
+    expiry: '',
+  }
   return (
     <div className={styles.payFormContainer}>
       <span className={styles.headerInfo}>Payment Information</span>
       <Formik
-        initialValues={{
+        initialValues={!isPayForOrder ? cashOut : {
           focusOnElement: '',
           name: '',
           number: '',
@@ -30,7 +37,7 @@ const PayForm = (props) => {
           expiry: '',
         }}
         onSubmit={pay}
-        validationSchema={Schems.PaymentSchema}
+        validationSchema={!isPayForOrder ? Schems.CashoutSchema : Schems.PaymentSchema}
       >
         {({ values }) => {
           const { name, number, expiry, cvc } = values;
@@ -73,7 +80,7 @@ const PayForm = (props) => {
                         notValid: styles.notValid,
                         error: styles.error,
                       }}
-                      type="text"
+                      type="number"
                       label="sum"
                     />
                   </div>
@@ -143,12 +150,12 @@ const PayForm = (props) => {
       )}
       <div className={styles.buttonsContainer}>
         <button form="myForm" className={styles.payButton} type="submit">
-          <span>{isPayForOrder ? 'Pay Now' : 'CashOut'}</span>
+          <span>{isPayForOrder ? 'Pay Now' : 'Cash Out'}</span>
         </button>
         {isPayForOrder && (
-          <div onClick={() => props.back()} className={styles.backButton}>
+          <button onClick={() => props.back()} className={styles.backButton}>
             <span>Back</span>
-          </div>
+          </button>
         )}
       </div>
     </div>

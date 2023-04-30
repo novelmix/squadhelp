@@ -17,7 +17,7 @@ class CustomerDashboard extends React.Component {
     this.props.getContests({
       limit: 8,
       offset: startFrom,
-      contestStatus: this.props.customerFilter,
+      status: this.props.customerFilter,
     });
   };
 
@@ -28,7 +28,7 @@ class CustomerDashboard extends React.Component {
   getContests = () => {
     this.props.getContests({
       limit: 8,
-      contestStatus: this.props.customerFilter,
+      status: this.props.customerFilter,
     });
   };
 
@@ -70,7 +70,7 @@ class CustomerDashboard extends React.Component {
     const { error, haveMore } = this.props;
     const { customerFilter } = this.props;
     return (
-      <div className={styles.mainContainer}>
+      <main className={styles.mainContainer}>
         <div className={styles.filterContainer}>
           <div
             onClick={() =>
@@ -126,7 +126,7 @@ class CustomerDashboard extends React.Component {
             </ContestsContainer>
           )}
         </div>
-      </div>
+      </main>
     );
   }
 }

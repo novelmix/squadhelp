@@ -1,31 +1,22 @@
 const { Router } = require('express');
-const {
-  addMessage,
-  getChat,
-  getPreview,
-  blackList,
-  favoriteChat,
-  createCatalog,
-  updateNameCatalog,
-  addNewChatToCatalog,
-  removeChatFromCatalog,
-  deleteCatalog,
-  getCatalogs,
-} = require('../controllers/Chat.controller');
-const { checkToken } = require('../middlewares/auth.middleware');
-
+const authController = require('../middlewares/auth.middleware');
+const chatController = require('../controllers/Chat.controller');
 const chat = Router();
 
-chat.get('/getPreview', checkToken, getPreview);
-chat.get('/getChat/:interlocutorId', checkToken, getChat);
-chat.post('/newMessage', checkToken, addMessage);
-chat.patch('/changeChatBlock', checkToken, blackList);
-chat.patch('/changeChatFavorite', checkToken, favoriteChat);
-chat.post('/createCatalog', checkToken, createCatalog);
-chat.patch('/updateNameCatalog/:catalogId', checkToken, updateNameCatalog);
-chat.put('/addNewChatToCatalog/:catalogId', checkToken, addNewChatToCatalog);
-chat.delete('/removeChatFromCatalog/:catalogId/:chatId', checkToken, removeChatFromCatalog);
-chat.delete('/deleteCatalog/:catalogId', checkToken, deleteCatalog);
-chat.get('/getCatalogList', checkToken, getCatalogs);
+chat.use(authController.checkToken);
+chat.get('/getPreview', chatController.getPreview);
+chat.get('/getChat/:interlocutorId', chatController.getChat);
+chat.post('/newMessage', chatController.addMessage);
+chat.patch('/changeChatBlock', chatController.blackList);
+chat.patch('/changeChatFavorite', chatController.favoriteChat);
+chat.post('/createCatalog', chatController.createCatalog);
+chat.patch('/updateNameCatalog/:catalogId', chatController.updateNameCatalog);
+chat.put('/addNewChatToCatalog/:catalogId', chatController.addNewChatToCatalog);
+chat.delete('/deleteCatalog/:catalogId', chatController.deleteCatalog);
+chat.get('/getCatalogList', chatController.getCatalogs);
+chat.delete(
+  '/removeChatFromCatalog/:catalogId/:chatId',
+  chatController.removeChatFromCatalog
+);
 
 module.exports = chat;

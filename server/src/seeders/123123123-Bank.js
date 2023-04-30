@@ -15,6 +15,13 @@ module.exports = {
         cvc: '505',
         balance: 5000,
       },
+      {
+        card_number: '5136703999532547',
+        name: 'Creator',
+        expiry: '09/24',
+        cvc: '555',
+        balance: 100,
+      },
     ], {});
   },
   async down (queryInterface, Sequelize) {

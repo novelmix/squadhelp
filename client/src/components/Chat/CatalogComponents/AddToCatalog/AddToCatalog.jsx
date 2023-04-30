@@ -10,7 +10,7 @@ const AddToCatalog = (props) => {
     const { catalogList } = props;
     const namesArray = [];
     catalogList.forEach((catalog) => {
-      namesArray.push(catalog.catalogName);
+      namesArray.push(catalog.name);
     });
     return namesArray;
   };
@@ -19,7 +19,7 @@ const AddToCatalog = (props) => {
     const { catalogList } = props;
     const valueArray = [];
     catalogList.forEach((catalog) => {
-      valueArray.push(catalog._id);
+      valueArray.push(catalog.id);
     });
     return valueArray;
   };

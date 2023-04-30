@@ -3,30 +3,24 @@ import valid from 'card-validator';
 
 export default {
   LoginSchem: yup.object().shape({
-    email: yup
-      .string()
-      .email('check email')
-      .required('required'),
+    email: yup.string().email('check email').required('required'),
     password: yup
       .string()
       .test(
         'test-password',
         'min 6 symbols',
-        value => value && value.trim().length >= 6
+        (value) => value && value.trim().length >= 6
       )
       .required('required'),
   }),
   RegistrationSchem: yup.object().shape({
-    email: yup
-      .string()
-      .email('check email')
-      .required('Email is required'),
+    email: yup.string().email('check email').required('Email is required'),
     password: yup
       .string()
       .test(
         'test-password',
         'min 6 symbols',
-        value => value && value.trim().length >= 6
+        (value) => value && value.trim().length >= 6
       )
       .required('required'),
     confirmPassword: yup
@@ -38,7 +32,7 @@ export default {
       .test(
         'test-firstName',
         'required',
-        value => value && value.trim().length >= 1
+        (value) => value && value.trim().length >= 1
       )
       .required('First Name is required'),
     lastName: yup
@@ -46,7 +40,7 @@ export default {
       .test(
         'test-lastName',
         'required',
-        value => value && value.trim().length >= 1
+        (value) => value && value.trim().length >= 1
       )
       .required('Last Name is required'),
     displayName: yup
@@ -54,7 +48,7 @@ export default {
       .test(
         'test-displayName',
         'required',
-        value => value && value.trim().length >= 1
+        (value) => value && value.trim().length >= 1
       )
       .required('Display Name is required'),
     role: yup
@@ -66,8 +60,7 @@ export default {
       .oneOf([true], 'Must Accept Terms and Conditions')
       .required('Must Accept Terms and Conditions'),
   }),
-  ContestSchem: yup.object({
-    nameVenture: yup.string().min(3),
+  ContestSchemName: yup.object({
     contestType: yup
       .string()
       .matches(/(name|tagline|logo)/)
@@ -76,8 +69,8 @@ export default {
       .string()
       .test(
         'test-title',
-        'required',
-        value => value && value.trim().length >= 1
+        'title of contest required',
+        (value) => value && value.trim().length >= 1
       )
       .required('title of contest required'),
     industry: yup.string().required('industry required'),
@@ -85,16 +78,52 @@ export default {
       .string()
       .test(
         'test-focusOfWork',
-        'required',
-        value => value && value.trim().length >= 1
+        'focus of work required',
+        (value) => value && value.trim().length >= 1
       )
       .required('focus of work required'),
     targetCustomer: yup
       .string()
       .test(
         'test-targetCustomer',
-        'required',
-        value => value && value.trim().length >= 1
+        'target customers required',
+        (value) => value && value.trim().length >= 1
+      )
+      .required('target customers required'),
+    styleName: yup.string().min(1),
+    typeOfName: yup.string().min(1),
+    file: yup.mixed(),
+    url: yup.string().min(1),
+  }),
+  ContestSchem: yup.object({
+    nameVenture: yup.string().min(3).required('name of your venture required'),
+    contestType: yup
+      .string()
+      .matches(/(name|tagline|logo)/)
+      .required(),
+    title: yup
+      .string()
+      .test(
+        'test-title',
+        'title of contest required',
+        (value) => value && value.trim().length >= 1
+      )
+      .required('title of contest required'),
+    industry: yup.string().required('industry required'),
+    focusOfWork: yup
+      .string()
+      .test(
+        'test-focusOfWork',
+        'focus of work required',
+        (value) => value && value.trim().length >= 1
+      )
+      .required('focus of work required'),
+    targetCustomer: yup
+      .string()
+      .test(
+        'test-targetCustomer',
+        'target customers required',
+        (value) => value && value.trim().length >= 1
       )
       .required('target customers required'),
     styleName: yup.string().min(1),
@@ -102,7 +131,7 @@ export default {
     typeOfTagline: yup.string().min(1),
     brandStyle: yup.string().min(1),
     file: yup.mixed(),
-    url: yup.string().min(1)
+    url: yup.string().min(1),
   }),
   filterSchem: yup.object().shape({
     typeIndex: yup.number().oneOf[(1, 2, 3, 4, 5, 6, 7)],
@@ -111,15 +140,15 @@ export default {
     industry: yup.string(),
   }),
   LogoOfferSchema: yup.object().shape({
-    offerData: yup.mixed().required('required'),
+    offerData: yup.mixed().required('image required'),
   }),
   TextOfferSchema: yup.object().shape({
     offerData: yup
       .string()
       .test(
         'test-offerData',
-        'required',
-        value => value && value.trim().length >= 1
+        'suggestion is required',
+        (value) => value && value.trim().length >= 1
       )
       .required('suggestion is required'),
   }),
@@ -129,55 +158,46 @@ export default {
       .test(
         'test-cardNumber',
         'Credit Card number is invalid',
-        value => valid.number(value).isValid
+        (value) => valid.number(value).isValid
       )
-      .required('required'),
-    name: yup
-      .string()
-      .min(1, 'required atleast one symbol')
-      .required('required'),
+      .required('Credit Card number is invalid'),
+    name: yup.string().min(1).required('required atleast one symbol'),
     cvc: yup
       .string()
-      .test('test-cvc', 'cvc is invalid', value => valid.cvv(value).isValid)
-      .required('required'),
+      .test('test-cvc', 'cvc is invalid', (value) => valid.cvv(value).isValid)
+      .required('cvc is invalid'),
     expiry: yup
       .string()
       .test(
         'test-expiry',
         'expiry is invalid',
-        value => valid.expirationDate(value).isValid
+        (value) => valid.expirationDate(value).isValid
       )
-      .required('required'),
+      .required('expiry is invalid'),
   }),
   CashoutSchema: yup.object().shape({
-    sum: yup
-      .number()
-      .min(5, 'min sum is 5$')
-      .required('required'),
+    sum: yup.number().min(5).required('min sum is 5$'),
     number: yup
       .string()
       .test(
         'test-cardNumber',
         'Credit Card number is invalid',
-        value => valid.number(value).isValid
+        (value) => valid.number(value).isValid
       )
-      .required('required'),
-    name: yup
-      .string()
-      .min(1)
-      .required('required'),
+      .required('Credit Card number is invalid'),
+    name: yup.string().min(1).required('name required'),
     cvc: yup
       .string()
-      .test('test-cvc', 'cvc is invalid', value => valid.cvv(value).isValid)
-      .required('required'),
+      .test('test-cvc', 'cvc is invalid', (value) => valid.cvv(value).isValid)
+      .required('cvc is invalid'),
     expiry: yup
       .string()
       .test(
         'test-expiry',
         'expiry is invalid',
-        value => valid.expirationDate(value).isValid
+        (value) => valid.expirationDate(value).isValid
       )
-      .required('required'),
+      .required('expiry is invalid'),
   }),
   UpdateUserSchema: yup.object().shape({
     firstName: yup
@@ -185,7 +205,7 @@ export default {
       .test(
         'test-firstName',
         'required',
-        value => value && value.trim().length >= 1
+        (value) => value && value.trim().length >= 1
       )
       .required('required'),
     lastName: yup
@@ -193,7 +213,7 @@ export default {
       .test(
         'test-lastName',
         'required',
-        value => value && value.trim().length >= 1
+        (value) => value && value.trim().length >= 1
       )
       .required('required'),
     displayName: yup
@@ -201,7 +221,7 @@ export default {
       .test(
         'test-displayName',
         'required',
-        value => value && value.trim().length >= 1
+        (value) => value && value.trim().length >= 1
       )
       .required('required'),
     file: yup.mixed(),
@@ -212,7 +232,7 @@ export default {
       .test(
         'test-message',
         'required',
-        value => value && value.trim().length >= 1
+        (value) => value && value.trim().length >= 1
       )
       .required('required'),
   }),
@@ -222,7 +242,7 @@ export default {
       .test(
         'test-catalogName',
         'required',
-        value => value && value.trim().length >= 1
+        (value) => value && value.trim().length >= 1
       )
       .required('required'),
   }),

@@ -20,7 +20,8 @@
 
     .btnOffer
       margin-top: 10px
-      background-color: #8aca6b
+      background-color: #4e618d
+      border: none
       border-radius: 6px
       color: white
       font-size: 16px
@@ -28,29 +29,18 @@
       outline: none
       cursor: pointer
       padding: 6px 12px
+      transition: all 0.2s ease-in-out
       @media(max-width: 500px)
         margin-left: 0
         margin-top: 10px
 
       &:hover
-        background-color: #4e618d
+        background-color: #28D2D1
 
     .inputContainer
       display: flex
       flex-direction: column
       justify-content: center
-
-      .fieldWarning
-        align-self: flex-end
-        margin-top: 2px
-        font-size: 15px
-        display: flex
-        flex-direction: row
-        justify-content: center
-        align-items: center
-        color: red
-        text-align: center
-
       .input
         background-color: white
         border-color: #6b89b0
@@ -107,5 +97,16 @@
           &:hover
             color: white
             background-color: #f27e51
+
+.fieldWarning
+  align-self: flex-end
+  margin-top: 2px
+  font-size: 15px
+  display: flex
+  flex-direction: row
+  justify-content: center
+  align-items: center
+  color: red
+  text-align: center
 
 

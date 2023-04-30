@@ -9,7 +9,7 @@ import ModeratorDashboard from '../../components/ModeratorDashboard/ModeratorDas
 const Dashboard = (props) => {
   const { role, history } = props;
   return (
-    <div>
+    <>
       <Header />
       {role === CONSTANTS.CUSTOMER ? (
         <CustomerDashboard history={history} match={props.match} />
@@ -20,7 +20,7 @@ const Dashboard = (props) => {
       ) : (
         history.replace('./')
       )}
-    </div>
+    </>
   );
 };
 

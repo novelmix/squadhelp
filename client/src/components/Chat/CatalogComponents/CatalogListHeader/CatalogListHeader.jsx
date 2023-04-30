@@ -12,11 +12,11 @@ import Schems from '../../../../utils/validators/validationSchems';
 
 const CatalogListHeader = (props) => {
   const changeCatalogName = (values) => {
-    const { changeCatalogName, _id } = props;
-    changeCatalogName({ catalogName: values.catalogName, catalogId: _id });
+    const { changeCatalogName, id } = props;
+    changeCatalogName({ catalogName: values.name, catalogId: id });
   };
   const {
-    catalogName,
+    name,
     changeShowModeCatalog,
     changeRenameCatalogMode,
     isRenameCatalog,
@@ -29,7 +29,7 @@ const CatalogListHeader = (props) => {
       />
       {!isRenameCatalog && (
         <div className={styles.infoContainer}>
-          <span>{catalogName}</span>
+          <span>{name}</span>
           <i
             className="fas fa-edit"
             onClick={() => changeRenameCatalogMode()}
@@ -45,7 +45,7 @@ const CatalogListHeader = (props) => {
           >
             <Form>
               <FormInput
-                name="catalogName"
+                name="name"
                 classes={{
                   container: styles.inputContainer,
                   input: styles.input,
@@ -66,13 +66,13 @@ const CatalogListHeader = (props) => {
 
 const mapStateToProps = (state) => {
   const { isRenameCatalog } = state.chatStore;
-  const { catalogName, _id } = state.chatStore.currentCatalog;
+  const { name, id } = state.chatStore.currentCatalog;
   return {
-    _id,
-    catalogName,
+    id,
+    name,
     isRenameCatalog,
     initialValues: {
-      catalogName,
+      name,
     },
   };
 };

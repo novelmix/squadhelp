@@ -1,35 +1,33 @@
 const { Router } = require('express');
-const {
-  setNewOffer,
-  setOfferStatus,
-  getOffersForModerator,
-  updateOfferForModerator,
-} = require('../controllers/Offer.controller');
-const { checkToken } = require('../middlewares/auth.middleware');
-const { uploadLogoFiles } = require('../config/multer');
-const {
-  canSendOffer,
-  onlyForCustomerWhoCreateContest,
-  onlyForModerator,
-} = require('../middlewares/basic.middleware');
-const pagination = require('../middlewares/pagination.middleware');
-
+const offerController = require('../controllers/Offer.controller');
+const authMiddleware = require('../middlewares/auth.middleware');
+const basicMiddleware = require('../middlewares/basic.middleware');
+const paginationMiddleware = require('../middlewares/pagination.middleware');
+const multerMiddleware = require('../middlewares/multer.middleware');
 const offer = Router();
 
-offer.get('/', checkToken, onlyForModerator, pagination, getOffersForModerator);
-offer.patch('/:offerId', checkToken, onlyForModerator, updateOfferForModerator);
-offer.post(
-  '/setNewOffer',
-  checkToken,
-  uploadLogoFiles,
-  canSendOffer,
-  setNewOffer
+offer.use(authMiddleware.checkToken);
+offer.get(
+  '/moderator',
+  basicMiddleware.onlyForModerator,
+  paginationMiddleware,
+  offerController.getOffersForModerator
+);
+offer.patch(
+  '/moderator/:offerId',
+  basicMiddleware.onlyForModerator,
+  offerController.updateOfferForModerator
 );
 offer.post(
+  '/:contestId/addOffer',
+  basicMiddleware.canSendOffer,
+  multerMiddleware.uploadLogoFiles,
+  offerController.setNewOffer
+);
+offer.patch(
   '/setOfferStatus',
-  checkToken,
-  onlyForCustomerWhoCreateContest,
-  setOfferStatus
+  basicMiddleware.onlyForCustomerWhoCreateContest,
+  offerController.setOfferStatus
 );
 
 module.exports = offer;

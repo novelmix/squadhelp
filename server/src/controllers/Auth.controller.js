@@ -8,9 +8,8 @@ const NotUniqueEmail = require('../errors/NotUniqueEmail');
 
 module.exports.registration = async (req, res, next) => {
   try {
-    const newUser = await userCreation(
-      Object.assign(req.body, { password: req.hashPass }),
-    );
+    const { body, hashPass: password } = req;
+    const newUser = await userCreation(Object.assign(body, { password }));
     const accessToken = await issueToken(newUser);
     await updateUser({ accessToken }, newUser.id);
     res.status(201).send({ token: accessToken });
@@ -25,8 +24,9 @@ module.exports.registration = async (req, res, next) => {
 
 module.exports.login = async (req, res, next) => {
   try {
-    const foundUser = await findUser({ email: req.body.email });
-    await passwordCompare(req.body.password, foundUser.password);
+    const { email, password } = req.body;
+    const foundUser = await findUser({ email });
+    await passwordCompare(password, foundUser.password);
     const accessToken = await issueToken(foundUser);
     await updateUser({ accessToken }, foundUser.id);
     res.status(200).send({ token: accessToken });

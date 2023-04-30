@@ -12,8 +12,9 @@ import Error from '../../components/Error/Error';
 
 const UserProfile = (props) => {
   const pay = (values) => {
-    const { number, expiry, cvc, sum } = values;
+    const { number, expiry, cvc, sum, name} = values;
     props.cashOut({
+      name,
       number,
       expiry,
       cvc,
@@ -30,13 +31,13 @@ const UserProfile = (props) => {
     clearPaymentStore,
   } = props;
   return (
-    <div>
+    <>
       <Header />
-      <div className={styles.mainContainer}>
+      <main className={styles.mainContainer}>
         <div className={styles.aside}>
           <span className={styles.headerAside}>Select Option</span>
           <div className={styles.optionsContainer}>
-            <div
+            <button
               className={classNames(styles.optionContainer, {
                 [styles.currentOption]:
                   profileViewMode === CONSTANTS.USER_INFO_MODE,
@@ -44,9 +45,9 @@ const UserProfile = (props) => {
               onClick={() => changeProfileViewMode(CONSTANTS.USER_INFO_MODE)}
             >
               UserInfo
-            </div>
+            </button>
             {role === CONSTANTS.CREATOR && (
-              <div
+              <button
                 className={classNames(styles.optionContainer, {
                   [styles.currentOption]:
                     profileViewMode === CONSTANTS.CASHOUT_MODE,
@@ -54,7 +55,7 @@ const UserProfile = (props) => {
                 onClick={() => changeProfileViewMode(CONSTANTS.CASHOUT_MODE)}
               >
                 Cashout
-              </div>
+              </button>
             )}
           </div>
         </div>
@@ -80,8 +81,8 @@ const UserProfile = (props) => {
             )}
           </div>
         )}
-      </div>
-    </div>
+      </main>
+    </>
   );
 };
 

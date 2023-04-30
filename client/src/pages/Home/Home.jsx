@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Header from '../../components/Header/Header';
 import CONSTANTS from '../../constants';
@@ -10,26 +10,42 @@ import carouselConstants from '../../carouselConstants';
 import Spinner from '../../components/Spinner/Spinner';
 
 const Home = props => {
-  const [index, setIndex] = useState(0);
-  const [styleName, setStyle] = useState(styles.headline__static);
-  let timeout;
-
+  const [loopNum, setLoopNum] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [text, setText] = useState('');
+  const [delta, setDelta] = useState(300 - Math.random() * 100);
+  const [index, setIndex] = useState(1);
+  const toRotate = CONSTANTS.HEADER_ANIMATION_TEXT;
+  const period = 2000;
   useEffect(() => {
-    timeout = setInterval(() => {
-      setIndex(index + 1);
-      setStyle(styles.headline__isloading);
-    }, 3000);
-    return () => {
-      setStyle(styles.headline__static);
-      clearInterval(timeout);
-    };
-  });
+    let ticker = setInterval(() => {
+      tick();
+    }, delta);
+    return () => clearInterval(ticker);
+  }, [text, delta])
 
+  const tick = () => {
+    const i = loopNum % toRotate.length;
+    const fullText = toRotate[i];
+    const updatedText = isDeleting ? fullText.substring(0, text.length - 1) : fullText.substring(0, text.length + 1);
+    setText(updatedText);
+    if (isDeleting) {
+      setDelta(prevDelta => prevDelta / 5);
+    }
+    if (!isDeleting && updatedText === fullText) {
+      setIsDeleting(true);
+      setIndex(prevIndex => prevIndex - 1);
+      setDelta(period);
+    } else if (isDeleting && updatedText === '') {
+      setIsDeleting(false);
+      setLoopNum(loopNum + 1);
+      setIndex(1);
+      setDelta(300);
+    } else {
+      setIndex(prevIndex => prevIndex + 1);
+    }
+  }
   const { isFetching } = props;
-  const text =
-    CONSTANTS.HEADER_ANIMATION_TEXT[
-      index % CONSTANTS.HEADER_ANIMATION_TEXT.length
-    ];
   return (
     <>
       <Header />
@@ -40,8 +56,8 @@ const Home = props => {
           <div className={styles.container}>
             <div className={styles.headerBar}>
               <div className={styles.headline}>
-                <span>Find the Perfect Name for</span>
-                <span className={styleName}>{text}</span>
+                <span className={styles.headline_title}>Find the Perfect Name for</span>
+                <span className={styles.headline_text}>{text}</span><span className={styles.headline_text}>|</span>
               </div>
               <p>
                 Launch a naming contest to engage hundreds of naming experts as
@@ -49,11 +65,11 @@ const Home = props => {
                 explore our hand-picked collection of premium names available
                 for immediate purchase
               </p>
-              <div className={styles.button}>
+              <button className={styles.button}>
                 <Link className={styles.button__link} to='/dashboard'>
                   DASHBOARD
                 </Link>
-              </div>
+              </button>
             </div>
             <div className={styles.greyContainer}>
               <SlideBar

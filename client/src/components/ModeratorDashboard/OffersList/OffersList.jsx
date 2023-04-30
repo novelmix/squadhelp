@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { confirmAlert } from 'react-confirm-alert';
-import { getOffers } from '../../../store/slices/offersSlice';
 import CONSTANTS from '../../../constants';
 import styles from './OffersList.module.sass';
 import { changeShowImage } from '../../../store/slices/contestByIdSlice';
@@ -13,16 +12,17 @@ const OffersList = (props) => {
   const {
     isFetching,
     offers,
-    getOffersStore,
     showImage,
     updateOffer,
-    contestByIdStore: { isShowOnFull, imagePath },
+    isShowOnFull,
+    imagePath,
     pageNumber,
+    getContent,
+    count
   } = props;
   useEffect(() => {
-    getOffersStore(pageNumber);
+    getContent();
   }, [pageNumber]);
-
   const moderatorStatusHandler = (offerId, status) =>
     confirmAlert({
       title: 'confirm',
@@ -51,15 +51,15 @@ const OffersList = (props) => {
       {isFetching ? (
         <SpinnerLoader />
       ) : (
-        <div className={styles.creativeInfoContainer}>
-          {offers.map(
+        <div className={styles.moderatorInfoContainer}>
+          {count ? offers.map(
             ({
               User: { avatar, firstName, lastName, email },
               id,
               fileName,
               text,
             }) => (
-              <div className={styles.creativeInfoContainer} key={id}>
+              <div className={styles.infoContainer} key={id}>
                 <img
                   src={
                     avatar === 'anon.png'
@@ -72,7 +72,7 @@ const OffersList = (props) => {
                   <span>{`${firstName} ${lastName}`}</span>
                   <span>{email}</span>
                 </div>
-                <div className={styles.responseConainer}>
+                <div className={styles.responseContainer}>
                   {fileName !== null ? (
                     <img
                       onClick={() =>
@@ -105,7 +105,7 @@ const OffersList = (props) => {
                 </div>
               </div>
             )
-          )}
+          ): <div className={styles.notFound}>Nothing not found</div>}
         </div>
       )}
     </>
@@ -114,14 +114,13 @@ const OffersList = (props) => {
 
 const mapStateToProps = (state) => {
   const {
-    contestByIdStore,
-    offersStore: { offers, isFetching },
+    contestByIdStore: { isShowOnFull, imagePath },
+    offersStore: { offers, isFetching, count },
   } = state;
-  return { contestByIdStore, offers, isFetching };
+  return { isShowOnFull, imagePath, offers, isFetching, count };
 };
 const mapDispatchToProps = (dispatch) => ({
   updateOffer: (data) => dispatch(updateOfferForModerator(data)),
-  getOffersStore: (data) => dispatch(getOffers(data)),
   showImage: (data) => dispatch(changeShowImage(data)),
 });
 

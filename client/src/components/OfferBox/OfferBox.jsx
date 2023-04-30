@@ -27,7 +27,7 @@ const OfferBox = (props) => {
       if (isEqual(participants, messagesPreview[i].participants)) {
         return {
           participants: messagesPreview[i].participants,
-          _id: messagesPreview[i]._id,
+          id: messagesPreview[i].id,
           blackList: messagesPreview[i].blackList,
           favoriteList: messagesPreview[i].favoriteList,
         };
@@ -36,15 +36,14 @@ const OfferBox = (props) => {
     return null;
   };
 
-  const resolveOffer = () => {
+  const changeStatusOffer = (userId, id, status) => {
     confirmAlert({
       title: 'confirm',
       message: 'Are u sure?',
       buttons: [
         {
           label: 'Yes',
-          onClick: () =>
-            props.setOfferStatus(props.data.User.id, props.data.id, 'resolve'),
+          onClick: () => props.setOfferStatus(userId, id, status),
         },
         {
           label: 'No',
@@ -52,24 +51,6 @@ const OfferBox = (props) => {
       ],
     });
   };
-
-  const rejectOffer = () => {
-    confirmAlert({
-      title: 'confirm',
-      message: 'Are u sure?',
-      buttons: [
-        {
-          label: 'Yes',
-          onClick: () =>
-            props.setOfferStatus(props.data.User.id, props.data.id, 'reject'),
-        },
-        {
-          label: 'No',
-        },
-      ],
-    });
-  };
-
   const changeMark = (value) => {
     props.clearError();
     props.changeMark({
@@ -202,10 +183,20 @@ const OfferBox = (props) => {
       </div>
       {props.needButtons(data.status) && (
         <div className={styles.btnsContainer}>
-          <div onClick={resolveOffer} className={styles.resolveBtn}>
+          <div
+            onClick={() =>
+              changeStatusOffer(props.data.User.id, props.data.id, 'resolve')
+            }
+            className={styles.resolveBtn}
+          >
             Resolve
           </div>
-          <div onClick={rejectOffer} className={styles.rejectBtn}>
+          <div
+            onClick={() =>
+              changeStatusOffer(props.data.User.id, props.data.id, 'reject')
+            }
+            className={styles.rejectBtn}
+          >
             Reject
           </div>
         </div>

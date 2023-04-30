@@ -61,7 +61,7 @@ class CreatorDashboard extends React.Component {
     const { creatorFilter } = this.props;
     const { industry } = this.props.dataForContest.data;
     array.push(
-      <option key={0} value={null}>
+      <option key={0} value={''}>
         Choose industry
       </option>
     );
@@ -112,6 +112,9 @@ class CreatorDashboard extends React.Component {
   };
 
   changePredicate = ({ name, value }) => {
+    if(name == 'contestId' && isNaN(value)){
+      return ;
+    }
     const { creatorFilter } = this.props;
     this.props.newFilter({
       [name]: value === 'Choose industry' ? null : value,
@@ -127,7 +130,7 @@ class CreatorDashboard extends React.Component {
     Object.keys(creatorFilter).forEach((el) => {
       if (creatorFilter[el]) obj[el] = creatorFilter[el];
     });
-    this.props.history.push(`/Dashboard?${queryString.stringify(obj)}`);
+    this.props.history.push(`/dashboard?${queryString.stringify(obj)}`);
   };
 
   parseUrlForParams = (search) => {
@@ -201,11 +204,11 @@ class CreatorDashboard extends React.Component {
     const { error, haveMore, creatorFilter } = this.props;
     const { isFetching } = this.props.dataForContest;
     return (
-      <div className={styles.mainContainer}>
+      <main className={styles.mainContainer}>
         <div className={styles.filterContainer}>
           <span className={styles.headerFilter}>Filter Results</span>
           <div className={styles.inputsContainer}>
-            <div
+            <button
               onClick={() =>
                 this.changePredicate({
                   name: 'ownEntries',
@@ -217,7 +220,7 @@ class CreatorDashboard extends React.Component {
               })}
             >
               My Entries
-            </div>
+            </button>
             <div className={styles.inputContainer}>
               <span>By contest type</span>
               {this.renderSelectType()}
@@ -232,6 +235,8 @@ class CreatorDashboard extends React.Component {
                     value: target.value,
                   })
                 }
+                placeholder='Contest ID'
+                maxLength={9}
                 name="contestId"
                 value={creatorFilter.contestId}
                 className={styles.input}
@@ -275,7 +280,7 @@ class CreatorDashboard extends React.Component {
             {this.setContestList()}
           </ContestsContainer>
         )}
-      </div>
+      </main>
     );
   }
 }

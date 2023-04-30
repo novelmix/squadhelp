@@ -2,20 +2,22 @@ import React from 'react';
 import styles from './Catalog.module.sass';
 
 const Catalog = props => {
+
   const { deleteCatalog, goToCatalog } = props;
-  const { catalogName, chats, _id } = props.catalog;
+  const { name, chats, id } = props.catalog;
   return (
     <div
+    key={id}
       className={styles.catalogContainer}
       onClick={event => goToCatalog(event, props.catalog)}
     >
-      <span className={styles.catalogName}>{catalogName}</span>
+      <span className={styles.catalogName}>{name}</span>
       <div className={styles.infoContainer}>
         <span>Chats number: </span>
-        <span className={styles.numbers}>{chats.length}</span>
+        <span className={styles.numbers}>{chats ? chats.length : null}</span>
         <i
           className='fas fa-trash-alt'
-          onClick={event => deleteCatalog(event, _id)}
+          onClick={event => deleteCatalog(event, id)}
         />
       </div>
     </div>

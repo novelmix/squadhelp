@@ -5,8 +5,15 @@ import LogoContestSpecialInfo from './LogoContestSpecialInfo';
 import NameContestSpecialInfo from './NameContestSpecialInfo';
 import TaglineContestSpecialInfo from './TaglineContestSpecialInfo';
 
-const ContestInfo = props => {
-  const { changeEditContest, userId, contestData, role, goChat } = props;
+const ContestInfo = (props) => {
+  const {
+    changeEditContest,
+    userId,
+    contestData,
+    role,
+    goChat,
+    downloadContestFile,
+  } = props;
   const {
     typeOfTagline,
     brandStyle,
@@ -30,16 +37,17 @@ const ContestInfo = props => {
             <span className={styles.label}>Contest Type</span>
             <span className={styles.data}>{contestType}</span>
           </div>
-          {User.id === userId && status !== CONSTANTS.CONTEST_STATUS_FINISHED && (
-            <div
-              onClick={() => changeEditContest(true)}
-              className={styles.editBtn}
-            >
-              Edit
-            </div>
-          )}
+          {User.id === userId &&
+            status !== CONSTANTS.CONTEST_STATUS_FINISHED && (
+              <div
+                onClick={() => changeEditContest(true)}
+                className={styles.editBtn}
+              >
+                Edit
+              </div>
+            )}
           {role !== CONSTANTS.CUSTOMER && (
-            <i onClick={goChat} className='fas fa-comments' />
+            <i onClick={goChat} className="fas fa-comments" />
           )}
         </div>
         <div className={styles.dataContainer}>
@@ -81,15 +89,12 @@ const ContestInfo = props => {
         {originalFileName && (
           <div className={styles.dataContainer}>
             <span className={styles.label}>Additional File</span>
-            <a
-              target='_blank'
+            <button
+              onClick={() => downloadContestFile(fileName)}
               className={styles.file}
-              href={`${CONSTANTS.publicURL}${fileName}`}
-              download={originalFileName}
-              rel='noreferrer'
             >
-              {originalFileName}
-            </a>
+              Download
+            </button>
           </div>
         )}
       </div>

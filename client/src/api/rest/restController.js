@@ -1,42 +1,61 @@
 import http from '../interceptor';
+import queryString from 'query-string';
 
-export const registerRequest = data => http.post('registration', data);
-export const loginRequest = data => http.post('login', data);
-export const getUser = () => http.post('getUser');
-export const updateContest = data => http.post('updateContest', data);
-export const setNewOffer = data => http.post('setNewOffer', data);
-export const setOfferStatus = data => http.post('setOfferStatus', data);
-export const downloadContestFile = data =>
-  http.get(`downloadFile/${data.fileName}`);
-export const payMent = data => http.post('pay', data.formData);
-export const changeMark = data => http.post('changeMark', data);
-export const getPreviewChat = () => http.post('getPreview');
-export const getDialog = data => http.post('getChat', data);
-export const dataForContest = data => http.post('dataForContest', data);
-export const cashOut = data => http.post('cashout', data);
-export const updateUser = data => http.post('updateUser', data);
-export const newMessage = data => http.post('newMessage', data);
-export const changeChatFavorite = data => http.post('favorite', data);
-export const changeChatBlock = data => http.post('blackList', data);
-export const getCatalogList = data => http.post('getCatalogs', data);
-export const addChatToCatalog = data => http.post('addNewChatToCatalog', data);
-export const createCatalog = data => http.post('createCatalog', data);
-export const deleteCatalog = data => http.post('deleteCatalog', data);
-export const removeChatFromCatalog = data =>
-  http.post('removeChatFromCatalog', data);
-export const changeCatalogName = data => http.post('updateNameCatalog', data);
-export const getCustomersContests = data =>
-  http.post(
-    'getCustomersContests',
-    { limit: data.limit, offset: data.offset },
-    {
-      headers: {
-        status: data.contestStatus,
-      },
-    }
+export const registerRequest = (data) => http.post('auth/registration', data); //auth
+export const loginRequest = (data) => http.post('auth/login', data);
+export const getUser = () => http.post('auth/checkAuth');
+
+export const payMent = (data) => http.post('users/pay', data); //user
+export const changeMark = (data) => http.patch('users/changeMark', data);
+export const updateUser = (data) => http.put('users/updateUser', data);
+export const cashOut = (data) => http.post('users/cashout', data);
+
+export const getPreviewChat = () => http.get('chats/getPreview'); //chat
+export const getDialog = (data) =>
+  http.get(`chats/getChat/${data.interlocutorId}`);
+export const newMessage = (data) => http.post('chats/newMessage', data);
+export const changeChatFavorite = (data) =>
+  http.patch('chats/changeChatFavorite', data);
+export const changeChatBlock = (data) =>
+  http.patch('chats/changeChatBlock', data);
+export const getCatalogList = (data) => http.get('chats/getCatalogList', data);
+export const addChatToCatalog = (data) =>
+  http.put(`chats/addNewChatToCatalog/${data.catalogId}`, data);
+export const createCatalog = (data) => http.post('chats/createCatalog', data);
+export const deleteCatalog = (data) =>
+  http.delete(`chats/deleteCatalog/${data.catalogId}`);
+export const removeChatFromCatalog = (data) =>
+  http.delete(`chats/removeChatFromCatalog/${data.catalogId}/${data.chatId}`);
+export const changeCatalogName = (data) =>
+  http.patch(`chats/updateNameCatalog/${data.catalogId}`, data);
+
+export const getOffers = ({ limit, offset }) =>
+  http.get(`offers/moderator?${queryString.stringify({ limit, offset })}`); //offer
+
+export const updateOfferForModerator = (data) =>
+  http.patch(`offers/moderator/${data.offerId}`, data); //offer
+
+export const setNewOffer = ({ contestId, data }) =>
+  http.post(`offers/${contestId}/addOffer`, data);
+export const setOfferStatus = (data) =>
+  http.patch('offers/setOfferStatus', data);
+
+export const dataForContest = (contestType) =>
+  http.get(`contests/dataForContest/${contestType}`); //contest
+export const updateContest = (data) => http.put('contests/updateContest', data);
+export const downloadContestFile = (fileName) =>
+  http.get(`contests/downloadFile/${fileName}`, { responseType: 'blob' });
+export const getContestById = (data) =>
+  http.get(`contests/getContestById/${data.contestId}`);
+export const getCustomersContests = ({ limit, offset, status }) =>
+  http.get(
+    `contests/getCustomersContests/${status}?${queryString.stringify({
+      limit,
+      offset,
+    })}`
   );
 
-export const getActiveContests = ({
+export const getCreativeContests = ({
   offset,
   limit,
   typeIndex,
@@ -45,19 +64,14 @@ export const getActiveContests = ({
   awardSort,
   ownEntries,
 }) =>
-  http.post('getAllContests', {
-    offset,
-    limit,
-    typeIndex,
-    contestId,
-    industry,
-    awardSort,
-    ownEntries,
-  });
-
-export const getContestById = data =>
-  http.get('getContestById', {
-    headers: {
-      contestId: data.contestId,
-    },
-  });
+  http.get(
+    `contests/getCreativeContests?${queryString.stringify({
+      offset,
+      limit,
+      typeIndex,
+      contestId,
+      industry,
+      awardSort,
+      ownEntries,
+    })}`
+  );

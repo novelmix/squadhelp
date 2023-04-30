@@ -5,7 +5,7 @@ import {
   updateContest,
   clearContestUpdationStore,
 } from '../../store/slices/contestUpdationSlice';
-import { changeEditContest } from '../../store/slices/contestByIdSlice';
+import { changeEditContest, downloadContestFile } from '../../store/slices/contestByIdSlice';
 import ContestForm from '../ContestForm/ContestForm';
 import styles from './Brief.module.sass';
 import ContestInfo from '../Contest/ContestInfo/ContestInfo';
@@ -82,6 +82,7 @@ const Brief = (props) => {
         changeEditContest={changeEditContest}
         role={role}
         goChat={goChat}
+        downloadContestFile={props.downloadContestFile}
       />
     );
   }
@@ -113,6 +114,7 @@ const mapDispatchToProps = (dispatch) => ({
   update: (data) => dispatch(updateContest(data)),
   changeEditContest: (data) => dispatch(changeEditContest(data)),
   clearContestUpdationStore: () => dispatch(clearContestUpdationStore()),
+  downloadContestFile: (data) => dispatch(downloadContestFile(data)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Brief));

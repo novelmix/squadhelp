@@ -6,7 +6,7 @@ import { getDateToday } from '../../../utils/functions.js';
 import styles from './EventFormTime.module.sass';
 
 const EventFormTime = (props) => {
-  const submitHandler = (values, formikBag) => {
+  const submitHandler = (values, {resetForm}) => {
     const { name, endDate, endTime, notificationTime } = values;
     const newEvent = {
       name,
@@ -15,7 +15,7 @@ const EventFormTime = (props) => {
       notificationTime: `${endDate} ${notificationTime}`,
     };
     props.addEvent(newEvent);
-    formikBag.resetForm();
+    resetForm();
   };
 
   const today = getDateToday(new Date());
@@ -25,7 +25,6 @@ const EventFormTime = (props) => {
         <h3 className={styles.headerFormTime}>Create new event</h3>
         <hr />
         <Formik
-          className="inputdataEvents"
           initialValues={{
             name: '',
             endDate: '',

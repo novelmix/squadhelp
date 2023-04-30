@@ -134,7 +134,7 @@ class ContestPage extends React.Component {
       setOfferStatusError,
     } = contestByIdStore;
     return (
-      <div>
+      <>
         {/* <Chat/> */}
         {isShowOnFull && (
           <LightBox
@@ -147,14 +147,14 @@ class ContestPage extends React.Component {
         <Header />
         {error ? (
           <div className={styles.tryContainer}>
-            <TryAgain getData={getData} />
+            <TryAgain getData={this.getData} />
           </div>
         ) : isFetching ? (
           <div className={styles.containerSpinner}>
             <Spinner />
           </div>
         ) : (
-          <div className={styles.mainInfoContainer}>
+          <main className={styles.mainInfoContainer}>
             <div className={styles.infoContainer}>
               <div className={styles.buttonsContainer}>
                 <span
@@ -205,9 +205,9 @@ class ContestPage extends React.Component {
               contestData={contestData}
               totalEntries={offers.length}
             />
-          </div>
+          </main>
         )}
-      </div>
+      </>
     );
   }
 }

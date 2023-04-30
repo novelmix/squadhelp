@@ -14,21 +14,20 @@ const Payment = (props) => {
     Object.keys(contests).forEach((key) =>
       contestArray.push({ ...contests[key] })
     );
-    const { number, expiry, cvc } = values;
+    const { name, number, expiry, cvc } = values;
     const data = new FormData();
     for (let i = 0; i < contestArray.length; i++) {
       data.append('files', contestArray[i].file);
       contestArray[i].haveFile = !!contestArray[i].file;
     }
+    data.append('name', name);
     data.append('number', number);
     data.append('expiry', expiry);
     data.append('cvc', cvc);
     data.append('contests', JSON.stringify(contestArray));
     data.append('price', '100');
     props.pay({
-      data: {
-        formData: data,
-      },
+      data,
       history: props.history,
     });
   };
@@ -46,10 +45,12 @@ const Payment = (props) => {
   return (
     <div>
       <div className={styles.header}>
+        <a href='/'>
         <img
           src={`${CONSTANTS.STATIC_IMAGES_PATH}blue-logo.png`}
           alt="blue-logo"
         />
+        </a>
       </div>
       <div className={styles.mainContainer}>
         <div className={styles.paymentContainer}>
@@ -73,7 +74,7 @@ const Payment = (props) => {
             <span>Total:</span>
             <span>$100.00 USD</span>
           </div>
-          <a href="http://www.google.com">Have a promo code?</a>
+          <a href="#">Have a promo code?</a>
         </div>
       </div>
     </div>

@@ -1,0 +1,1 @@
+start-dev-command: bash ./start-dev.sh

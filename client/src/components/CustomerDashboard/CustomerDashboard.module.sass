@@ -39,7 +39,7 @@
     margin-right: 50px
     display: flex
     flex-direction: column
-    box-shadow: 0 5px 10px 3px rgba(0, 0, 0, 0.1)
+    // box-shadow: 0 5px 10px 3px rgba(0, 0, 0, 0.1)
     align-items: flex-start
     background-color: white
     margin-bottom: 15px
@@ -51,13 +51,14 @@
       height: 80px
 
     .filter
+      border: none
       margin-top: 15px
       align-self: stretch
       text-align: center
       color: #46568a
       font-size: 18px
-      border-radius: 10px
       padding: 10px
+      background-color: #fff
       @media(max-width: 1000px)
         height: 20px
         margin: 0 5px
@@ -66,12 +67,12 @@
         background-color: #eefaea
 
     .activeFilter
+      border: none
       transition: 0.5s background-color
       margin-top: 15px
       align-self: stretch
       text-align: center
       font-size: 18px
-      border-radius: 10px
       padding: 10px
       background-color: #4e618d
       color: white

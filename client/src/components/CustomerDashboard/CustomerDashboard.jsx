@@ -72,7 +72,7 @@ class CustomerDashboard extends React.Component {
     return (
       <main className={styles.mainContainer}>
         <div className={styles.filterContainer}>
-          <div
+          <button
             onClick={() =>
               this.props.newFilter(CONSTANTS.CONTEST_STATUS_ACTIVE)
             }
@@ -84,8 +84,8 @@ class CustomerDashboard extends React.Component {
             })}
           >
             Active Contests
-          </div>
-          <div
+          </button>
+          <button
             onClick={() =>
               this.props.newFilter(CONSTANTS.CONTEST_STATUS_FINISHED)
             }
@@ -97,8 +97,8 @@ class CustomerDashboard extends React.Component {
             })}
           >
             Completed contests
-          </div>
-          <div
+          </button>
+          <button
             onClick={() =>
               this.props.newFilter(CONSTANTS.CONTEST_STATUS_PENDING)
             }
@@ -110,7 +110,7 @@ class CustomerDashboard extends React.Component {
             })}
           >
             Inactive contests
-          </div>
+          </button>
         </div>
         <div className={styles.contestsContainer}>
           {error ? (

@@ -12,5 +12,6 @@ auth.post(
 );
 auth.post('/login', validatorMiddleware.validateLogin, authController.login);
 auth.post('/checkAuth', authMiddleware.checkAuth);
+auth.post('/refreshSession', authController.refreshSession);
 
 module.exports = auth;

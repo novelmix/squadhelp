@@ -31,13 +31,13 @@ class ContestsContainer extends React.Component {
     return (
       <>
         <div>
-        {this.props.children}
+          {this.props.children}
+          {!isFetching && (
+            <div className={styles.spinnerContainer}>
+              <Spinner />
+            </div>
+          )}
         </div>
-        {isFetching && (
-          <div className={styles.spinnerContainer}>
-            <Spinner />
-          </div>
-        )}
       </>
     );
   }

@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { clearUserStore } from '../../store/slices/userSlice';
 import { getUser } from '../../store/slices/userSlice';
 import SubHeader from './SubHeader/SubHeader';
+import { logOut } from '../../api/rest/restController'
 
 const Header = (props) => {
   const { data, getUserStore, clearUser, history, events, isFetching } = props;
@@ -13,8 +14,8 @@ const Header = (props) => {
     }
   }, [data]);
 
-  const logOut = () => {
-    localStorage.removeItem('accessToken');
+  const logOutHandler = () => {
+    logOut();
     clearUser();
     history.replace('/login');
   };
@@ -37,7 +38,7 @@ const Header = (props) => {
           startContests={startContests}
           events={events}
           countEvents={countEvents}
-          logOut={logOut}
+          logOut={logOutHandler}
         />
       )}
     </header>

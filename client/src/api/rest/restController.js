@@ -1,9 +1,19 @@
 import http from '../interceptor';
 import queryString from 'query-string';
+import CONSTANTS from '../../constants';
 
 export const registerRequest = (data) => http.post('auth/registration', data); //auth
 export const loginRequest = (data) => http.post('auth/login', data);
 export const getUser = () => http.post('auth/checkAuth');
+export const refreshUser = async () => {
+  const refreshToken = localStorage.getItem(CONSTANTS.REFRESH_TOKEN);
+  const { data } = await http.post('auth/refreshSession', { refreshToken });
+  return data;
+};
+export const logOut = () => {
+  localStorage.removeItem(CONSTANTS.ACCESS_TOKEN);
+  localStorage.removeItem(CONSTANTS.REFRESH_TOKEN);
+};
 
 export const payMent = (data) => http.post('users/pay', data); //user
 export const changeMark = (data) => http.patch('users/changeMark', data);

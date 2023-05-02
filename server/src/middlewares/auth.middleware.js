@@ -8,7 +8,7 @@ const ServerError = require('../errors/ServerError');
 module.exports.checkAuth = async (req, res, next) => {
   const accessToken = req.headers.authorization;
   if (!accessToken) {
-    return next(new TokenError('need token'));
+    return next(new TokenError('need token', 401));
   }
   try {
     const tokenData = await verifyAccessToken(accessToken);

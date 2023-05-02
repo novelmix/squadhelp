@@ -191,6 +191,10 @@ class CreatorDashboard extends React.Component {
     this.props.history.push(`/contest/${contestId}`);
   };
 
+  componentWillUnmount () {
+    this.props.clearContestsList();
+  }
+
   tryLoadAgain = () => {
     this.props.clearContestsList();
     this.props.getContests({

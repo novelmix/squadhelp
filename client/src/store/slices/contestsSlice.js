@@ -32,7 +32,7 @@ export const getContests = decorateAsyncThunk({
 });
 
 const reducers = {
-  clearContestsList: state => {
+  clearContestsList: (state) => {
     state.error = null;
     state.contests = [];
   },
@@ -48,11 +48,15 @@ const reducers = {
   }),
 };
 
-const extraReducers = builder => {
+const extraReducers = (builder) => {
   builder.addCase(getContests.pending, pendingReducer);
   builder.addCase(getContests.fulfilled, (state, { payload }) => {
     state.isFetching = false;
-    state.contests = [...state.contests, ...payload.contests];
+    const array = [...state.contests, ...payload.contests];
+    const unique = [
+      ...new Map(array.map((item) => [item['id'], item])).values(),
+    ];
+    state.contests = unique;
     state.haveMore = payload.haveMore;
   });
   builder.addCase(getContests.rejected, (state, { payload }) => {
@@ -71,10 +75,7 @@ const contestsSlice = createSlice({
 
 const { actions, reducer } = contestsSlice;
 
-export const {
-  clearContestsList,
-  setNewCustomerFilter,
-  setNewCreatorFilter,
-} = actions;
+export const { clearContestsList, setNewCustomerFilter, setNewCreatorFilter } =
+  actions;
 
 export default reducer;

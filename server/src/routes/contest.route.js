@@ -13,23 +13,24 @@ contest.get(
   '/getCustomersContests/:status',
   basicMiddlaware.onlyForCustomer,
   paginationMiddleware,
-  contestController.getCustomersContests
+  contestController.getCustomersContests,
 );
 contest.get(
   '/getContestById/:contestId',
   basicMiddlaware.canGetContest,
-  contestController.getContestById
+  contestController.getContestById,
 );
 contest.get(
   '/getCreativeContests',
   basicMiddlaware.onlyForCreative,
   paginationMiddleware,
-  contestController.getCreativeContests
+  contestController.getCreativeContests,
 );
 contest.put(
   '/updateContest',
   multerMiddleware.updateContestFile,
-  contestController.updateContest
+  basicMiddlaware.canUpdateContest,
+  contestController.updateContest,
 );
 
 module.exports = contest;

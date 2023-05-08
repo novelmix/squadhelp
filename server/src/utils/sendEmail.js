@@ -3,6 +3,7 @@ const path = require('path');
 const { transporter } = require('../config/mailer');
 const { errorLogger } = require('./errorLogger');
 const CONSTANTS = require('../constants');
+//!!todo setting email
 const from =
   process.env.NODE_ENV === 'production' ? '' : CONSTANTS.MAIL_SEND_DEV;
 
